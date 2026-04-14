@@ -1,4 +1,100 @@
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: Arial;
+  transition: 0.3s;
+  background: white;
+  color: black;
+}
+
+/* ================= DARK MODE ================= */
+body.dark .navbar {
+  background: rgba(30, 30, 30, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+body.dark {
+  background: #121212;
+  color: white;
+}
+
+/* ===== CARD / BOX GLOBAL ===== */
+body.dark .card,
+body.dark .login-card,
+body.dark .box {
+  background: rgba(30, 30, 30, 0.7);
+  backdrop-filter: blur(10px);
+  color: white;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+}
+
+/* ===== INPUT GLOBAL ===== */
+body.dark input,
+body.dark textarea,
+body.dark select {
+  background: rgba(255,255,255,0.1);
+  color: white;
+  border: 1px solid #555;
+}
+
+/* ===== LABEL ===== */
+body.dark label {
+  color: #ccc;
+}
+
+/* ===== LINK ===== */
+body.dark a {
+  color: #153be6;
+}
+
+/* ===== BUTTON ===== */
+body.dark button {
+  opacity: 0.9;
+}
+/* ===== DARK MODE ADMIN DASHBOARD ===== */
+body.dark .container {
+  color: white;
+}
+
+body.dark h1 {
+  color: #90caf9;
+}
+
+
+body.dark table {
+  background: #1e1e1e;
+  color: white;
+}
+
+body.dark th {
+  background-color: #2a2a2a;
+  color: #fff;
+}
+
+body.dark td {
+  border: 1px solid #333;
+}
+
+body.dark tr:hover {
+  background: #2a2a2a;
+}
+
+body.dark .toast {
+  background: #1565c0;
+}
+
+body.dark p {
+  color: #ccc;
+}
+
+body.dark .table-wrapper {
+  background: transparent;
+}
+body.dark .icon {
+  color: #0c24aa;
+  transition: 0.3s;
+}
+
+body.dark .icon:hover {
+  color: #3b82f6;
 }

@@ -1,11 +1,20 @@
-// src/App.js
-import React from 'react';
-import AppRoutes from './routes/AppRoutes';  // ✅ avy amin'ny src/App.js
+import React from "react";
+import { BrowserRouter } from "react-router-dom";
+import AppRoutes from "./routes/AppRoutes";
+import Navbar from "./components/Navbar";
+
 function App() {
   return (
-    <div>
+    <BrowserRouter>
+
+      {/* GLOBAL NAVBAR */}
+      <Navbar />
+
+      {/* ROUTES */}
       <AppRoutes />
-    </div>
+
+    </BrowserRouter>
   );
 }
+
 export default App;

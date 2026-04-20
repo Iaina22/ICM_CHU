@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import Navbar from "../components/Navbar"; 
 
 import s1 from "../assets/images/labo.jpg";
 import s2 from "../assets/images/entretien.jpg";
@@ -35,8 +36,9 @@ function Home() {
   }, []); // ✅ no warning (slides stable)
 
   return (
+    
     <div className="home-container">
-
+      <Navbar />
       {/* MAIN */}
       <div className="main">
 

@@ -1,14 +1,31 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./routes/AppRoutes";
-import Navbar from "./components/Navbar";
+import socket from "./socket";
+
 
 function App() {
+
+  useEffect(() => {
+    const userId = localStorage.getItem("userId");
+
+    // 🔗 mampifandray user amin'ny socket
+    if (userId) {
+      socket.emit("registerUser", userId);
+    }
+
+    // 🔔 mandray notification (validation / rejet)
+    socket.on("statusUpdate", (data) => {
+      alert(data.message); // afaka soloina toast
+    });
+
+    return () => {
+      socket.off("statusUpdate");
+    };
+  }, []);
+
   return (
     <BrowserRouter>
-
-      {/* GLOBAL NAVBAR */}
-      <Navbar />
 
       {/* ROUTES */}
       <AppRoutes />

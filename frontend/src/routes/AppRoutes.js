@@ -4,6 +4,7 @@ import Register from "../pages/Register";
 import Login from "../pages/Login";
 import Adminhome from "../pages/Adminhome";
 import Article from "../pages/Article";
+import Profile from "../pages/Profile";
 
 function AppRoutes() {
   return (
@@ -13,6 +14,7 @@ function AppRoutes() {
       <Route path="/login" element={<Login />} />
       <Route path="/adminhome" element={<Adminhome />} />
       <Route path="/article" element={<Article />} />
+       <Route path="/profile" element={<Profile />} />
     </Routes>
   );
 }

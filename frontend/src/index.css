@@ -98,3 +98,51 @@ body.dark .icon {
 body.dark .icon:hover {
   color: #3b82f6;
 }
+/* LIGHT MODE (default) */
+.item span {
+  color: #333;
+}
+
+/* DARK MODE */
+body.dark .dropdown {
+  background: #1e1e1e; 
+
+  z-index: 1000;
+
+}
+
+body.dark .item span {
+  color: #ffffff;
+}
+
+body.dark .item {
+  color: #ddd;
+}
+
+body.dark .item:hover {
+  background: #2a2a2a;
+}
+
+
+body.dark .logout {
+  color: #3643ff;
+}
+/* DARK MODE MODAL */
+.dark .modal {
+  background: #1e1e2f;
+  color: white;
+}
+
+.dark .modal p {
+  color: #ccc;
+}
+
+.dark .modalActions button:first-child {
+  background: #444;
+  color: white;
+}
+
+.dark .modalActions button:last-child {
+  background: #e74c3c;
+  color: white;
+}

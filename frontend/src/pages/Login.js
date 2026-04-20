@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Link } from "react-router-dom";
-
+import Navbar from "../components/NavbarLogin"; 
 
 function Login() {
   const [prenom, setPrenom] = useState('');
@@ -35,6 +35,7 @@ function Login() {
       if (data.success) {
 
         if (data.user.status === 'active') {
+           localStorage.setItem("userId", data.user.id);
           setModal("✅ Connexion réussie !");
 
           setTimeout(() => {
@@ -72,7 +73,8 @@ function Login() {
 
   return (
     <div className="container">
-
+      
+       <Navbar />
       {/* ===== MODAL ===== */}
       {modal && (
         <div className="modal-overlay">
@@ -108,8 +110,8 @@ function Login() {
         </div>
 
         {/* ===== FORGOT PASSWORD (FIXED) ===== */}
-        <div className="forgot-password">
-    <Link to="/Mdpoublier" className="forgot-link">
+        <div className="forgot-password" >
+    <Link to="/Mdpoublier"  className="forgot-link">
   Mot de passe oublié ?
 </Link>
         </div>
@@ -132,14 +134,14 @@ function Login() {
           backdrop-filter: blur(12px);
           padding: 40px;
           border-radius: 20px;
-          width: 300px;
+          width: 250px;
           text-align: center;
           box-shadow: 0 10px 40px rgba(0,0,0,0.2);
         }
 
         .login-card h2 {
           margin-bottom: 20px;
-          color: #0f5ed7;
+          color: #75a7f1;
         }
 
         .form-group {
@@ -173,7 +175,7 @@ function Login() {
         font-size: 12px;
         color: #0b851f;
         text-decoration: none;
-      
+        text-align: end;
   
       }
 

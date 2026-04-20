@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/images/log.png";
-
-
+import Navbar from "../components/NavbarRegister"; 
+import socket from "../socket";
 
 export default function Register() {
   const [step, setStep] = useState(1);
@@ -22,6 +22,27 @@ export default function Register() {
     mdp: "",
     confirmMdp: "",
   });
+
+  // ✅ FIX SOCKET USER
+  const user = JSON.parse(localStorage.getItem("user"));
+
+  useEffect(() => {
+    if (!user) return;
+
+    socket.emit("registerUser", user.id);
+
+    socket.on("approved", (data) => {
+      alert(data.message);
+
+      if (data.message.includes("approuvé")) {
+        navigate("/");
+      }
+    });
+
+    return () => {
+      socket.off("approved");
+    };
+  }, [user, navigate]); // ✅ FIX ONLY
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -45,28 +66,33 @@ export default function Register() {
       });
 
       const data = await response.json();
+if (data.success) {
+  setMessage("Inscription en attente de validation...");
 
-      if (data.success) {
-        setMessage("Inscription en attente de validation...");
+ localStorage.setItem("user", JSON.stringify({
+  id: data.userId,
+  ...formData
+}));
 
-        setStep(1);
-        setFormData({
-          nom: "",
-          prenom: "",
-          age: "",
-          sexe: "",
-          cin: "",
-          adresse: "",
-          email: "",
-          phone: "",
-          role: "",
-          mdp: "",
-          confirmMdp: "",
-        });
+  setStep(1);
+  setFormData({
+    nom: "",
+    prenom: "",
+    age: "",
+    sexe: "",
+    cin: "",
+    adresse: "",
+    email: "",
+    phone: "",
+    role: "",
+    mdp: "",
+    confirmMdp: "",
+  });
 
         setTimeout(() => {
-          navigate("/");
+          
         }, 2000);
+
       } else {
         setMessage(data.message);
       }
@@ -78,12 +104,13 @@ export default function Register() {
 
   return (
     <div className="container">
+      <Navbar />
 
       {/* TOAST */}
       {message && <div className="toast">{message}</div>}
 
       <div className="card">
-        {/* LEFT DESIGN */}
+        {/* LEFT */}
         <div className="left">
           <div className="text">
             <div>
@@ -101,7 +128,7 @@ export default function Register() {
           <div className="circle small"></div>
         </div>
 
-        {/* RIGHT FORM */}
+        {/* RIGHT */}
         <div className="right">
           <h2>inscrivez-vous !</h2>
 
@@ -111,6 +138,7 @@ export default function Register() {
                 <input type="text" name="nom" placeholder="Nom" value={formData.nom} onChange={handleChange} required />
                 <input type="text" name="prenom" placeholder="Prénom" value={formData.prenom} onChange={handleChange} required />
                 <input type="number" name="age" placeholder="Âge" min="0" value={formData.age} onChange={handleChange} required />
+
                 <select name="sexe" value={formData.sexe} onChange={handleChange} required>
                   <option value="">Sexe</option>
                   <option value="Homme">Homme</option>
@@ -118,10 +146,7 @@ export default function Register() {
                   <option value="Autre">Autre</option>
                 </select>
 
-                <input
-                  type="text"
-                  name="cin"
-                  placeholder="CIN"
+                <input type="text" name="cin" placeholder="CIN"
                   value={formData.cin}
                   onChange={(e) => {
                     let value = e.target.value.replace(/\D/g, "");
@@ -129,11 +154,10 @@ export default function Register() {
                     if (formatted.length > 15) formatted = formatted.slice(0, 15);
                     setFormData({ ...formData, cin: formatted });
                   }}
-                  pattern="[0-9]{3}-[0-9]{3}-[0-9]{3}-[0-9]{3}"
                   required
                 />
 
-                <input
+                   <input
                   type="tel"
                   name="phone"
                   placeholder="Téléphone"
@@ -155,7 +179,9 @@ export default function Register() {
                   required
                 />
 
-                <button type="button" onClick={() => setStep(2)} className="btn">Suivant</button>
+                <button type="button" onClick={() => setStep(2)} className="btn">
+                  Suivant
+                </button>
               </>
             )}
 
@@ -163,6 +189,7 @@ export default function Register() {
               <>
                 <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required />
                 <input type="text" name="adresse" placeholder="Adresse" value={formData.adresse} onChange={handleChange} required />
+
                 <select name="role" value={formData.role} onChange={handleChange} required>
                   <option value="">Choisir un rôle</option>
                   <option value="Admin">Admin</option>
@@ -170,12 +197,17 @@ export default function Register() {
                   <option value="Magasinier">Magasinier</option>
                   <option value="Médecin">Médecin</option>
                 </select>
-                <input type="password" name="mdp" placeholder="Mot de passe" maxLength="8" value={formData.mdp} onChange={handleChange} required />
-                <input type="password" name="confirmMdp" placeholder="Confirmer mot de passe" maxLength="8" value={formData.confirmMdp} onChange={handleChange} required />
+
+                <input type="password" name="mdp" placeholder="Mot de passe" value={formData.mdp} onChange={handleChange} required />
+                <input type="password" name="confirmMdp" placeholder="Confirmer mot de passe" value={formData.confirmMdp} onChange={handleChange} required />
 
                 <div className="actions">
-                  <button type="button" onClick={() => setStep(1)} className="btn-outline">Retour</button>
-                  <button type="submit" className="btn">S'inscrire</button>
+                  <button type="button" onClick={() => setStep(1)} className="btn-outline">
+                    Retour
+                  </button>
+                  <button type="submit" className="btn">
+                    S'inscrire
+                  </button>
                 </div>
               </>
             )}
@@ -184,6 +216,7 @@ export default function Register() {
       </div>
 
       <style>{`
+      
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         .container { height: 100vh; margin-top:3%; display: flex; justify-content: center; align-items: center;  }
         .card { width: 950px; height: 500px; background: white; border-radius: 15px; display: flex; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
@@ -197,7 +230,7 @@ export default function Register() {
         .small { width: 100px; height: 100px; background: #a5d8ff; top: 30px; right: 40px; animation-delay: 2s; }
         @keyframes float { 0% { transform: translateY(0px) scale(1); } 50% { transform: translateY(-20px) scale(1.05); } 100% { transform: translateY(0px) scale(1); } }
         .right { width: 50%; padding: 30px; display: flex; flex-direction: column; justify-content: center; }
-        .right h2 { margin-bottom: 15px; color: #f52e2e; }
+        .right h2 { margin-bottom: 15px; color: #8893fa; }
         .right input, .right select { padding: 10px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #ddd; outline: none; width: 80%; }
         .right input:focus, .right select:focus { border-color: #0f5ed7; }
         .btn { padding: 10px; background: #0f5ed7; color: white; border: none; border-radius: 8px; cursor: pointer; margin-top: 10px; width: 80%; }
@@ -225,6 +258,8 @@ export default function Register() {
           80% { opacity: 1; }
           100% { opacity: 0; transform: translateY(-20px); }
         }
+      
+    
       `}</style>
     </div>
   );

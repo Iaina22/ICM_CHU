@@ -1,14 +1,11 @@
 import React from 'react';
+import Navbar from "../components/NavbarUser"; 
 
 export default function Article() {
   return (
-    <div style={{
-      height: '100vh', 
-      display: 'flex', 
-      justifyContent: 'center', 
-      alignItems: 'center', 
-      fontFamily: 'sans-serif'
-    }}>
+    <div className="home-container">
+      <Navbar />
+    
       <h1>Bienvenue sur la page Article !</h1>
     </div>
   );

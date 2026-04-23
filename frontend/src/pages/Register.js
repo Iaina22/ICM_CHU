@@ -49,58 +49,70 @@ export default function Register() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (formData.mdp !== formData.confirmMdp) {
-      setMessage("Mot de passe incorrect !");
-      return;
-    }
+  if (formData.mdp !== formData.confirmMdp) {
+    setMessage("Mot de passe incorrect !");
+    return;
+  }
 
-    try {
-      const response = await fetch("http://localhost:5000/api/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
+  try {
+    const response = await fetch("http://localhost:5000/api/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    const data = await response.json();
+
+    if (data.success) {
+      setMessage("Inscription en attente de validation...");
+
+      const user = {
+        id: data.userId,
+        nom: formData.nom,
+        prenom: formData.prenom,
+        age: formData.age,
+        sexe: formData.sexe,
+        cin: formData.cin,
+        adresse: formData.adresse,
+        email: formData.email,
+        phone: formData.phone,
+        role: formData.role
+      };
+
+      localStorage.setItem("user", JSON.stringify(user));
+
+      setStep(1);
+
+      setFormData({
+        nom: "",
+        prenom: "",
+        age: "",
+        sexe: "",
+        cin: "",
+        adresse: "",
+        email: "",
+        phone: "",
+        role: "",
+        mdp: "",
+        confirmMdp: "",
       });
+      setTimeout(() => {
+        navigate("/"); 
+      }, 1500);
 
-      const data = await response.json();
-if (data.success) {
-  setMessage("Inscription en attente de validation...");
-
- localStorage.setItem("user", JSON.stringify({
-  id: data.userId,
-  ...formData
-}));
-
-  setStep(1);
-  setFormData({
-    nom: "",
-    prenom: "",
-    age: "",
-    sexe: "",
-    cin: "",
-    adresse: "",
-    email: "",
-    phone: "",
-    role: "",
-    mdp: "",
-    confirmMdp: "",
-  });
-
-        setTimeout(() => {
-          
-        }, 2000);
-
-      } else {
-        setMessage(data.message);
-      }
-    } catch (err) {
-      console.error(err);
-      setMessage("Erreur serveur, réessayez plus tard");
+    } else {
+      setMessage(data.message);
     }
-  };
+
+  } catch (err) {
+    console.error(err);
+    setMessage("Erreur serveur, réessayez plus tard");
+  }
+};
 
   return (
     <div className="container">

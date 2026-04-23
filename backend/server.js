@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
 const db = require('./db');
+const authRoutes = require('./routes/authRoutes');
 
 const http = require("http");
 const { Server } = require("socket.io");
@@ -44,6 +45,7 @@ io.on("connection", (socket) => {
 
 app.use(cors());
 app.use(express.json());
+app.use("/api", authRoutes);
 
 
 // ======================
@@ -245,6 +247,27 @@ app.post('/api/admin/reject/:id', async (req, res) => {
     res.status(500).json({
       message: "Erreur serveur"
     });
+  }
+});
+//profil
+app.get('/api/user/:id', async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const result = await db.query(
+      'SELECT id, nom, prenom, age, sexe, email, phone, role, status FROM users WHERE id = $1',
+      [id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.json(null);
+    }
+
+    res.json(result.rows[0]);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Erreur serveur" });
   }
 });
 

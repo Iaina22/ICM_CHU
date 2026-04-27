@@ -24,7 +24,6 @@ const slides = [
 ];
 
 function Home() {
-
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
@@ -36,14 +35,13 @@ function Home() {
   }, []); // ✅ no warning (slides stable)
 
   return (
-    
     <div className="home-container">
       <Navbar />
-      {/* MAIN */}
-      <div className="main">
 
+      {/* MAIN INTRO */}
+      <div className="main">
         {/* LEFT */}
-        <div className="content">
+        <div className="content"  id="articles">
           <h1>Compta Matière CHU.</h1>
           <p>
             Optimisez la gestion des matières hospitalières avec MediGestion.
@@ -60,27 +58,44 @@ function Home() {
 
         {/* RIGHT SLIDER */}
         <div className="slider">
-
           <div className="legend">
             <span className="fixed">Matériel : </span>
             <span className="dynamic">{slides[index].text}</span>
           </div>
-
           <img src={slides[index].img} alt="slide" />
-
         </div>
-
       </div>
 
-      
+      {/* MOUVEMENTS SECTION */}
+      <div className="section" id="stocks">
+        <h2>Entrées / Sorties</h2>
+        <p>Suivi des mouvements de stock (entrées et sorties).</p>
+      </div>
+
+      {/* FOURNISSEURS SECTION */}
+      <div className="section" id="demandes">
+        <h2>Fournisseurs</h2>
+        <p>Gestion des fournisseurs et partenaires hospitaliers.</p>
+      </div>
+
+      {/* DEMANDES SECTION */}
+      <div className="section" id="contacts">
+        <h2>Demandes</h2>
+        <p>Suivi des demandes internes de matériel.</p>
+      </div>
+
       <style>{`
+        html {
+          scroll-behavior: smooth; /* ✅ Smooth scroll */
+        }
+
         body {
           margin: 0;
           font-family: 'Segoe UI', sans-serif;
         }
 
         .home-container {
-          height: 100vh;
+          min-height: 100vh;
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -92,9 +107,8 @@ function Home() {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          margin-top:6%;
+          margin-top:18%;
         }
-
         .content {
           width: 45%;
           display: flex;
@@ -162,6 +176,19 @@ function Home() {
           background: white;
           color: #0a3a83;
           border: 2px solid #0f5ed7;
+        }
+
+        .section {
+          width: 90%;
+          margin: 50px auto;
+          padding: 20px;
+          background: #f5f5f5;
+          border-radius: 12px;
+        }
+
+        .section h2 {
+          color: #0f5ed7;
+          margin-bottom: 10px;
         }
       `}</style>
     </div>

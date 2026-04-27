@@ -50,7 +50,7 @@ function Navbar() {
 </div>
 
         <ul className="nav-links">
-          <li><Link to="/articles">Articles</Link></li>
+          <li><Link to="/UserArticle">Articles</Link></li>
           <li><Link to="/demandes">Demandes</Link></li>
           <li>      
             <Link to="/profile" className="item">

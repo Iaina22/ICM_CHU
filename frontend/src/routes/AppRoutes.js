@@ -2,9 +2,11 @@ import { Routes, Route } from "react-router-dom";
 import Home from "../pages/Home";
 import Register from "../pages/Register";
 import Login from "../pages/Login";
-import Adminhome from "../pages/Adminhome";
-import Article from "../pages/Article";
+import Adminhome from "../pages/Admin/Adminhome";
+import Article from "../pages/Admin/Article";
 import Profile from "../pages/Profile";
+import Stock from "../pages/Admin/Stock";
+import UserArticle from "../pages/User/UserArticle";
 
 function AppRoutes() {
   return (
@@ -14,7 +16,9 @@ function AppRoutes() {
       <Route path="/login" element={<Login />} />
       <Route path="/adminhome" element={<Adminhome />} />
       <Route path="/article" element={<Article />} />
-       <Route path="/profile" element={<Profile />} />
+      <Route path="/profile" element={<Profile />} />
+      <Route path="/stock" element={<Stock />} />
+      <Route path="/userArticle" element={<UserArticle />} />
     </Routes>
   );
 }

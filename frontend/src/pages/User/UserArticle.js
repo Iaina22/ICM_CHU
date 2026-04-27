@@ -1,5 +1,5 @@
 import React from 'react';
-import Navbar from "../components/NavbarUser"; 
+import Navbar from "../../components/NavbarUser"; 
 
 export default function Article() {
   return (

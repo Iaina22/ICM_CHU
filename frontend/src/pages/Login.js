@@ -19,7 +19,7 @@ function Login() {
 
     // ===== STOCK =====
     if (prenom === "Stock" && password === "stock12") {
-      navigate("/Article");
+      navigate("/Stock");
       return;
     }
 
@@ -42,7 +42,7 @@ function Login() {
             setModal('');
             setPrenom('');
             setPassword('');
-            navigate("/Article");
+            navigate("/UserArticle");
           }, 1500);
         }
 

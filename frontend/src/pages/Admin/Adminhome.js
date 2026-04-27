@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { FiBell, FiSettings, FiUser, FiLogOut, FiFilter } from 'react-icons/fi';
-import Navbar from "../components/NavbarAdmin";
-import socket from "../socket";
+import Navbar from "../../components/NavbarAdmin";
+import socket from "../../socket";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 
 export default function Adminhome() {
+
   const [users, setUsers] = useState([]);
   const [message, setMessage] = useState('');
   const [openMenu, setOpenMenu] = useState(false);
   const [search, setSearch] = useState('');
   const navigate = useNavigate();
+  const [filterStatus, setFilterStatus] = useState("all");
+const [showFilterMenu, setShowFilterMenu] = useState(false);
   
   
 const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -23,7 +26,7 @@ const [showLogoutModal, setShowLogoutModal] = useState(false);
 
   const fetchPendingUsers = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/admin/pending-users');
+      const res = await fetch('http://localhost:5000/api/admin/users');
       const data = await res.json();
       setUsers(Array.isArray(data) ? data : []);
     } catch (err) {
@@ -58,8 +61,6 @@ const [showLogoutModal, setShowLogoutModal] = useState(false);
   if (data.success) {
     // ❌ esorina ito
     // setMessage(data.message);
-
-    // ✅ mandefa notif amin'ny user via socket
     socket.emit("approveUser", {
       userId: id,
       message: "Votre compte est approuvé ✅"
@@ -79,12 +80,17 @@ const [showLogoutModal, setShowLogoutModal] = useState(false);
     }
   };
 
-  const filteredUsers = users.filter((u) =>
+const filteredUsers = users
+  .filter((u) =>
     `${u.nom} ${u.prenom} ${u.email} ${u.role}`
       .toLowerCase()
       .includes(search.toLowerCase())
-  );
-
+  )
+  .filter((u) => {
+    if (filterStatus === "all") return true;
+    return u.status?.toLowerCase() === filterStatus;
+  });
+  
   return (
     <div className="container">
       <Navbar />
@@ -127,12 +133,34 @@ const [showLogoutModal, setShowLogoutModal] = useState(false);
                 </Link>
                 </div>
 
-                <div className="item">
-                  <FiFilter className="icon" />
-                  <span>Filtre</span>
-                </div>
+            <div className="item" onClick={() => setShowFilterMenu(!showFilterMenu)}>
+  <FiFilter className="icon" />
+  <span>Filtre</span>
+</div>
 
-                <div className="item logout" onClick={() => setShowLogoutModal(true)}>
+{showFilterMenu && (
+          <div className="dropdown filter-menu">
+          <div className="item" onClick={() => setFilterStatus("pending")}>
+          <span>En attente</span>
+        </div>
+
+        <div className="item" onClick={() => setFilterStatus("active")}>
+        <span>Acceptés</span>
+      </div>
+
+      <div className="item" onClick={() => setFilterStatus("rejected")}>
+        <span>Refusés</span>
+      </div>
+
+      <div className="item" onClick={() => setFilterStatus("all")}>
+        <span>Tous</span>
+    </div>
+  </div>
+)}
+
+
+
+    <div className="item logout" onClick={() => setShowLogoutModal(true)}>
   <FiLogOut className="icon" />
   <span>Déconnecter</span>
   {showLogoutModal && (
@@ -204,36 +232,78 @@ const [showLogoutModal, setShowLogoutModal] = useState(false);
                 <th>Téléphone</th>
                 <th>Rôle</th>
                 <th>Mot de passe</th>
-                <th>Actions</th>
+                <th>Status</th>
+                <th>Action</th>
               </tr>
             </thead>
+<tbody>
+  {filteredUsers.map((user, index) => (
+    <tr key={user.id ?? index}>
+      
+      <td>{user.id ?? '-'}</td>
+      <td>{user.nom ?? '-'}</td>
+      <td>{user.prenom ?? '-'}</td>
+      <td>{user.age ?? '-'}</td>
+      <td>{user.sexe ?? '-'}</td>
+      <td>{user.cin ?? '-'}</td>
+      <td>{user.adresse ?? '-'}</td>
+      <td>{user.email ?? '-'}</td>
+      <td>{user.phone ?? '-'}</td>
+      <td>{user.role ?? '-'}</td>
 
-            <tbody>
-              {filteredUsers.map((user, index) => (
-                <tr key={user.id ?? index}>
-                  <td>{user.id ?? '-'}</td>
-                  <td>{user.nom ?? '-'}</td>
-                  <td>{user.prenom ?? '-'}</td>
-                  <td>{user.age ?? '-'}</td>
-                  <td>{user.sexe ?? '-'}</td>
-                  <td>{user.cin ?? '-'}</td>
-                  <td>{user.adresse ?? '-'}</td>
-                  <td>{user.email ?? '-'}</td>
-                  <td>{user.phone ?? '-'}</td>
-                  <td>{user.role ?? '-'}</td>
-                  <td>••••••</td>
+     
+      <td>••••••</td>
 
-                  <td>
-                    <button onClick={() => handleApprove(user.id)} className="approve">
-                      Approuver
-                    </button>
-                    <button onClick={() => handleReject(user.id)} className="reject">
-                      Rejeter
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+   
+      <td>
+         <span
+          style={{
+            padding: "4px 8px",
+            borderRadius: "6px",
+            color: "white",
+            background:
+              user.status === "active"
+                ? "green"
+                : user.status === "rejected"
+                ? "red"
+                : "orange",
+          }}
+        >
+          {user.status ?? "pending"}
+        </span></td>
+
+      {/* ⚡ ACTIONS */}
+      <td>
+        {user.status === "pending" ? (
+          <>
+            <button
+              onClick={() => handleApprove(user.id)}
+              className="approve"
+            >
+              Approuver
+            </button>
+
+            <button
+              onClick={() => handleReject(user.id)}
+              className="reject"
+            >
+              Rejeter
+            </button>
+          </>
+        ) : user.status === "active" ? (
+          <span style={{ color: "green", fontWeight: "bold" }}>
+            Accepté ✔
+          </span>
+        ) : user.status === "rejected" ? (
+          <span style={{ color: "red", fontWeight: "bold" }}>
+            Refusé ❌
+          </span>
+        ) : null}
+      </td>
+
+    </tr>
+  ))}
+</tbody>
 
           </table>
         </div>
@@ -411,6 +481,24 @@ const [showLogoutModal, setShowLogoutModal] = useState(false);
   from { transform: scale(0.8); }
   to { transform: scale(1); }
 }
+  .filter-menu {
+  position: absolute;
+  right: 0;
+  top: 100px; 
+  background: ;
+  border-radius: 10px;
+  width: 150px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  
+}
+.filter-menu .item {
+  padding: 10px;
+  cursor: pointer;
+}
+.filter-menu .item:hover {
+  background: #f2f2f2;
+}
+
       `}</style>
     </div>
   );

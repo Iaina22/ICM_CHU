@@ -49,9 +49,9 @@ function Navbar() {
 </div>
 
         <ul className="nav-links">
-          <li><Link to="/article">Articles</Link></li>
-          <li><Link to="/adminhome">Utlisateurs</Link></li>
-          <li><Link to="/stock">Gestion des stocks</Link></li>
+          <li><Link to="/articles">Articles</Link></li>
+          <li><Link to="/mouvements">Entrées / Sorties</Link></li>
+          <li><Link to="/fournisseurs">Fournisseurs</Link></li>
           <li><Link to="/demandes">Demandes</Link></li>
 
           {/* DARK / LIGHT TOGGLE */}

@@ -178,6 +178,23 @@ app.get('/api/admin/pending-users', async (req, res) => {
   }
 });
 
+app.get('/api/admin/users', async (req, res) => {
+  try {
+    const result = await db.query(`
+      SELECT id, nom, prenom, age, sexe, cin, adresse, email, phone, role, status
+      FROM users
+      ORDER BY id DESC
+    `);
+
+    res.json(result.rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({
+      message: "Erreur serveur"
+    });
+  }
+});
+
 
 // ======================
 // APPROVE USER

@@ -1,191 +1,169 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ========== GLOBAL STYLE ========== */
 body {
-  margin: 0;
-  font-family: Arial;
-  transition: 0.3s;
-  background: white;
-  color: black;
+  @apply m-0 font-sans transition duration-300 bg-white text-black;
 }
 
-/* ================= DARK MODE ================= */
-body.dark .navbar {
-  background: rgba(30, 30, 30, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+/* ========== DARK MODE ========== */
+.dark .navbar {
+  @apply bg-[rgba(30,30,30,0.6)] border border-[rgba(255,255,255,0.12)] shadow-[0_4px_20px_rgba(0,0,0,0.4)];
 }
 
-body.dark {
-  background: #121212;
-  color: white;
+.dark body {
+  @apply bg-[#121212] text-white;
 }
 
 /* ===== CARD / BOX GLOBAL ===== */
-body.dark .card,
-body.dark .login-card,
-body.dark .box {
-  background: rgba(30, 30, 30, 0.7);
-  backdrop-filter: blur(10px);
-  color: white;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+.dark .card,
+.dark .login-card,
+.dark .box {
+  @apply bg-[rgba(30,30,30,0.7)] backdrop-blur-md text-white shadow-[0_10px_40px_rgba(0,0,0,0.6)];
 }
 
 /* ===== INPUT GLOBAL ===== */
-body.dark input,
-body.dark textarea,
-body.dark select {
-  background: rgba(255,255,255,0.1);
-  color: white;
-  border: 1px solid #555;
+.dark input,
+.dark textarea,
+.dark select {
+  @apply bg-[rgba(255,255,255,0.1)] text-white border border-[#555];
 }
 
 /* ===== LABEL ===== */
-body.dark label {
-  color: #ccc;
+.dark label {
+  @apply text-gray-300;
 }
 
 /* ===== LINK ===== */
-body.dark a {
-  color: #153be6;
+.dark a {
+  @apply text-blue-700;
 }
 
 /* ===== BUTTON ===== */
-body.dark button {
-  opacity: 0.9;
+.dark button {
+  @apply opacity-90;
 }
+
 /* ===== DARK MODE ADMIN DASHBOARD ===== */
-body.dark .container {
-  color: white;
+.dark .container {
+  @apply text-white;
 }
 
-body.dark h1 {
-  color: #90caf9;
+.dark h1 {
+  @apply text-blue-300;
 }
 
-
-body.dark table {
-  background: #1e1e1e;
-  color: white;
+.dark table {
+  @apply bg-[#1e1e1e] text-white;
 }
 
-body.dark th {
-  background-color: #2a2a2a;
-  color: #fff;
+.dark th {
+  @apply bg-[#2a2a2a] text-white;
 }
 
-body.dark td {
-  border: 1px solid #333;
+.dark td {
+  @apply border border-[#333];
 }
 
-body.dark tr:hover {
-  background: #2a2a2a;
+.dark tr:hover {
+  @apply bg-[#2a2a2a];
 }
 
-body.dark .toast {
-  background: #1565c0;
+.dark .toast {
+  @apply bg-blue-800;
 }
 
-body.dark p {
-  color: #ccc;
+.dark p {
+  @apply text-gray-300;
 }
 
-body.dark .table-wrapper {
-  background: transparent;
-}
-body.dark .icon {
-  color: #0c24aa;
-  transition: 0.3s;
+.dark .table-wrapper {
+  @apply bg-transparent;
 }
 
-body.dark .icon:hover {
-  color: #3b82f6;
+.dark .icon {
+  @apply text-blue-900 transition duration-300;
 }
+
+.dark .icon:hover {
+  @apply text-blue-500;
+}
+
 /* LIGHT MODE (default) */
 .item span {
-  color: #333;
+  @apply text-gray-800;
 }
 
 /* DARK MODE */
-body.dark .dropdown {
-  background: #1e1e1e; 
-
-  z-index: 1000;
-
+.dark .dropdown {
+  @apply bg-[#1e1e1e] z-[1000];
 }
 
-body.dark .item span {
-  color: #ffffff;
+.dark .item span {
+  @apply text-white;
 }
 
-body.dark .item {
-  color: #ddd;
+.dark .item {
+  @apply text-gray-300;
 }
 
-body.dark .item:hover {
-  background: #2a2a2a;
+.dark .item:hover {
+  @apply bg-[#2a2a2a];
 }
 
-
-body.dark .logout {
-  color: #3643ff;
+.dark .logout {
+  @apply text-blue-600;
 }
+
 /* DARK MODE MODAL */
 .dark .modal {
-  background: #1e1e2f;
-  color: white;
+  @apply bg-[#1e1e2f] text-white;
 }
 
 .dark .modal p {
-  color: #ccc;
+  @apply text-gray-300;
 }
 
 .dark .modalActions button:first-child {
-  background: #444;
-  color: white;
-  border-color:white;
+  @apply bg-[#444] text-white border border-white;
 }
 
 .dark .modalActions button:last-child {
-  background: #e74c3c;
-  color: white;
+  @apply bg-red-600 text-white;
 }
+
 /* ===== DARK MODE PROFIL ===== */
-body.dark .profile-card {
-  background: #1e1e1e;
-  color: #e0e0e0;
-  box-shadow: 0 5px 25px rgba(8, 7, 7, 0.1);
+.dark .profile-card {
+  @apply bg-[#1e1e1e] text-gray-300 shadow-[0_5px_25px_rgba(8,7,7,0.1)];
 }
 
-body.dark .avatar {
-  background: linear-gradient(135deg, #673ab7, #9575cd); /* gradient violet ho an'ny dark mode */
-  color: #fff;
+.dark .avatar {
+  @apply bg-gradient-to-r from-purple-700 to-purple-400 text-white;
 }
 
-body.dark .info-box {
-  background: #2a2a2a;
-  color: #e0e0e0;
-  box-shadow: 0 5px 15px rgba(12, 11, 11, 0.85);
+.dark .info-box {
+  @apply bg-[#2a2a2a] text-gray-300 shadow-[0_5px_15px_rgba(12,11,11,0.85)];
 }
 
-body.dark .info strong {
-  color: #90caf9; /* manga mazava ho an'ny label */
+.dark .info strong {
+  @apply text-blue-300;
 }
 
-body.dark .action-buttons button {
-  background: #2a2a2a;
-  border: 1px solid #444;
-  color: #e0e0e0;
+.dark .action-buttons button {
+  @apply bg-[#2a2a2a] border border-[#444] text-gray-300;
 }
 
-body.dark .action-buttons button:hover {
-  background: #333;
+.dark .action-buttons button:hover {
+  @apply bg-[#333];
 }
 
-body.dark .status.active {
-  background: #388e3c;
+.dark .status.active {
+  @apply bg-green-700;
 }
-body.dark .status.pending {
-  background: #f57c00;
+.dark .status.pending {
+  @apply bg-orange-600;
 }
-body.dark .status.rejected {
-  background: #d32f2f;
+.dark .status.rejected {
+  @apply bg-red-700;
 }
-

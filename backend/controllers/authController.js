@@ -24,7 +24,7 @@ exports.register = async (req, res) => {
     res.json({
       success: true,
       message: "Inscription réussie",
-      user: result.rows[0]   // 🔥 INFO USER MIVOAKA
+      user: result.rows[0]
     });
 
   } catch (err) {
@@ -48,7 +48,6 @@ exports.login = async (req, res) => {
     }
 
     const user = userQuery.rows[0];
-
     const isMatch = await bcrypt.compare(mdp, user.password_hash);
 
     if (!isMatch) {
@@ -69,5 +68,37 @@ exports.login = async (req, res) => {
       success: false,
       message: "Erreur serveur"
     });
+  }
+};
+
+// ================= GET USER BY ID =================
+exports.getUser = async (req, res) => {
+  try {
+    const userQuery = await userModel.getUserById(req.params.id);
+
+    if (userQuery.rows.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.json(userQuery.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+};
+
+// ================= UPDATE USER =================
+exports.updateUser = async (req, res) => {
+  try {
+    const updatedUser = await userModel.updateUserById(req.params.id, req.body);
+
+    if (updatedUser.rows.length === 0) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.json(updatedUser.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Erreur serveur" });
   }
 };

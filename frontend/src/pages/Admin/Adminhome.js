@@ -91,415 +91,96 @@ const filteredUsers = users
     return u.status?.toLowerCase() === filterStatus;
   });
   
-  return (
-    <div className="container">
-      <Navbar />
-      <h1>Administration des utilisateurs</h1>
+ <div className="p-6 mt-10 font-sans">
+  <Navbar />
+  <h1 className="text-center text-blue-600 text-xl md:text-2xl font-bold mb-6">
+    Administration des utilisateurs
+  </h1>
 
-      {/* MESSAGE ACTIONS */}
-      {message && <div className="toast">{message}</div>}
+  {/* SEARCH */}
+  <input
+    type="text"
+    placeholder="Rechercher utilisateur..."
+    value={search}
+    onChange={(e) => setSearch(e.target.value)}
+    className="border border-gray-400 rounded px-3 py-2 w-full md:w-64 mb-4 text-sm"
+  />
 
-      {/* NOTIF POPUP (CLICK ONLY) */}
-      {showNotif && notif && (
-        <div className="toast notif-popup">
-          {notif}
-        </div>
-      )}
-
-      {/* TOP BAR */}
-      <div className="top-bar">
-        <div className="right-icons">
-
-          {/* 🔔 BELL */}
-          <div className="icon-box" onClick={() => setShowNotif(!showNotif)}>
-            <FiBell className="icon" />
-            {count > 0 && <span className="badge">{count}</span>}
-          </div>
-
-          {/* SETTINGS */}
-          <div className="menu-container">
-            <FiSettings
-              className="icon"
-              onClick={() => setOpenMenu(!openMenu)}
-            />
-
-            {openMenu && (
-              <div className="dropdown">
-
-                <div className="item">
-                  <Link to="/profile" className="item">
-                  <FiUser className="icon" />
-                  <span>Profil</span>
-                </Link>
-                </div>
-
-            <div className="item" onClick={() => setShowFilterMenu(!showFilterMenu)}>
-  <FiFilter className="icon" />
-  <span>Filtre</span>
+  {/* TABLE */}
+  {filteredUsers.length === 0 ? (
+    <p className="text-center text-gray-600 text-sm">Aucun utilisateur.</p>
+  ) : (
+    <table className="w-full border border-blue-700 text-xs md:text-sm">
+      <thead>
+        <tr className="bg-blue-600 text-white">
+          <th className="p-2 border">id</th>
+          <th className="p-2 border">Nom</th>
+          <th className="p-2 border">Prénom</th>
+          <th className="p-2 border">Âge</th>
+          <th className="p-2 border">Sexe</th>
+          <th className="p-2 border">CIN</th>
+          <th className="p-2 border">Adresse</th>
+          <th className="p-2 border">Email</th>
+          <th className="p-2 border">Téléphone</th>
+          <th className="p-2 border">Rôle</th>
+          <th className="p-2 border">Mot de passe</th>
+          <th className="p-2 border">Status</th>
+          <th className="p-2 border">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {filteredUsers.map((user, index) => (
+          <tr key={user.id ?? index}>
+            <td className="p-2 border">{user.id ?? '-'}</td>
+            <td className="p-2 border">{user.nom ?? '-'}</td>
+            <td className="p-2 border">{user.prenom ?? '-'}</td>
+            <td className="p-2 border">{user.age ?? '-'}</td>
+            <td className="p-2 border">{user.sexe ?? '-'}</td>
+            <td className="p-2 border">{user.cin ?? '-'}</td>
+            <td className="p-2 border">{user.adresse ?? '-'}</td>
+            <td className="p-2 border">{user.email ?? '-'}</td>
+            <td className="p-2 border">{user.phone ?? '-'}</td>
+            <td className="p-2 border">{user.role ?? '-'}</td>
+            <td className="p-2 border">••••••</td>
+            <td className="p-2 border">
+              <span
+                className={`px-2 py-1 rounded text-white ${
+                  user.status === "active"
+                    ? "bg-green-600"
+                    : user.status === "rejected"
+                    ? "bg-red-600"
+                    : "bg-orange-500"
+                }`}
+              >
+                {user.status ?? "pending"}
+              </span>
+            </td>
+            <td className="p-2 border">
+              {user.status === "pending" ? (
+                <>
+                  <button
+                    onClick={() => handleApprove(user.id)}
+                    className="bg-green-600 text-white px-2 py-1 rounded mr-2 text-xs md:text-sm"
+                  >
+                    Approuver
+                  </button>
+                  <button
+                    onClick={() => handleReject(user.id)}
+                    className="bg-red-600 text-white px-2 py-1 rounded text-xs md:text-sm"
+                  >
+                    Rejeter
+                  </button>
+                </>
+              ) : user.status === "active" ? (
+                <span className="text-green-600 font-bold">Accepté ✔</span>
+              ) : user.status === "rejected" ? (
+                <span className="text-red-600 font-bold">Refusé ❌</span>
+              ) : null}
+            </td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  )}
 </div>
-
-{showFilterMenu && (
-          <div className="dropdown filter-menu">
-          <div className="item" onClick={() => setFilterStatus("pending")}>
-          <span>En attente</span>
-        </div>
-
-        <div className="item" onClick={() => setFilterStatus("active")}>
-        <span>Acceptés</span>
-      </div>
-
-      <div className="item" onClick={() => setFilterStatus("rejected")}>
-        <span>Refusés</span>
-      </div>
-
-      <div className="item" onClick={() => setFilterStatus("all")}>
-        <span>Tous</span>
-    </div>
-  </div>
-)}
-
-
-
-    <div className="item logout" onClick={() => setShowLogoutModal(true)}>
-  <FiLogOut className="icon" />
-  <span>Déconnecter</span>
-  {showLogoutModal && (
-  <div className="modalOverlay">
-    <div className="modal">
-      <h3>Déconnexion</h3>
-      <p>Voulez-vous vraiment vous déconnecter ?</p>
-
-      <div className="modalActions">
-              <button
-              type="button"
-              onClick={(e) => {
-                e.stopPropagation(); 
-                setShowLogoutModal(false);
-              }}
-            >
-              Non
-            </button>
-
-<button
-  type="button"
-  onClick={() => {
-    localStorage.removeItem("user");
-    socket.disconnect();
-    setShowLogoutModal(false);
-    navigate("/");
-  }}
->
-  Oui
-</button>
-      </div>
-    </div>
-  </div>
-)}
-</div>
-
-              </div>
-            )}
-          </div>
-
-        </div>
-      </div>
-
-      {/* SEARCH */}
-      <input
-        type="text"
-        placeholder="Rechercher utilisateur..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="search"
-      />
-
-      {/* TABLE */}
-      {filteredUsers.length === 0 ? (
-        <p>Aucun utilisateur.</p>
-      ) : (
-        <div className="table-wrapper">
-          <table>
-            <thead>
-              <tr>
-                <th>id</th>
-                <th>Nom</th>
-                <th>Prénom</th>
-                <th>Âge</th>
-                <th>Sexe</th>
-                <th>CIN</th>
-                <th>Adresse</th>
-                <th>Email</th>
-                <th>Téléphone</th>
-                <th>Rôle</th>
-                <th>Mot de passe</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-<tbody>
-  {filteredUsers.map((user, index) => (
-    <tr key={user.id ?? index}>
-      
-      <td>{user.id ?? '-'}</td>
-      <td>{user.nom ?? '-'}</td>
-      <td>{user.prenom ?? '-'}</td>
-      <td>{user.age ?? '-'}</td>
-      <td>{user.sexe ?? '-'}</td>
-      <td>{user.cin ?? '-'}</td>
-      <td>{user.adresse ?? '-'}</td>
-      <td>{user.email ?? '-'}</td>
-      <td>{user.phone ?? '-'}</td>
-      <td>{user.role ?? '-'}</td>
-
-     
-      <td>••••••</td>
-
-   
-      <td>
-         <span
-          style={{
-            padding: "4px 8px",
-            borderRadius: "6px",
-            color: "white",
-            background:
-              user.status === "active"
-                ? "green"
-                : user.status === "rejected"
-                ? "red"
-                : "orange",
-          }}
-        >
-          {user.status ?? "pending"}
-        </span></td>
-
-      {/* ⚡ ACTIONS */}
-      <td>
-        {user.status === "pending" ? (
-          <>
-            <button
-              onClick={() => handleApprove(user.id)}
-              className="approve"
-            >
-              Approuver
-            </button>
-
-            <button
-              onClick={() => handleReject(user.id)}
-              className="reject"
-            >
-              Rejeter
-            </button>
-          </>
-        ) : user.status === "active" ? (
-          <span style={{ color: "green", fontWeight: "bold" }}>
-            Accepté ✔
-          </span>
-        ) : user.status === "rejected" ? (
-          <span style={{ color: "red", fontWeight: "bold" }}>
-            Refusé ❌
-          </span>
-        ) : null}
-      </td>
-
-    </tr>
-  ))}
-</tbody>
-
-          </table>
-        </div>
-      )}
-
-      {/* CSS */}
-      <style>{`
-        .container {
-          padding: 30px;
-          margin-top: 5%;
-          font-family: sans-serif;
-        }
-
-        h1 {
-          color: #0f5ed7;
-          text-align: center;
-        }
-
-        .top-bar {
-          display: flex;
-          justify-content: flex-end;
-        }
-
-        .right-icons {
-          display: flex;
-          gap: 12px;
-          align-items: center;
-          margin-top: -5%;
-        }
-
-        .icon {
-          font-size: 22px;
-          cursor: pointer;
-        }
-
-        .icon-box {
-          position: relative;
-          z-index: 1001;
-        }
-
-        .badge {
-          position: absolute;
-          top: -5px;
-          right: -5px;
-          background: red;
-          color: white;
-          border-radius: 50%;
-          padding: 3px 6px;
-          font-size: 12px;
-          z-index:2000;
-        }
-
-        .dropdown {
-          position: absolute;
-          right: 0;
-          top: 150px;
-          background: white;
-          border-radius: 10px;
-          width: 150px;
-          box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        .item {
-          display: flex;
-          gap: 10px;
-          padding: 10px;
-          cursor: pointer;
-        }
-
-        .item:hover {
-          background: #f2f2f2d5;
-        }
-
-        .logout {
-          color: black;
-        }
-
-        .search {
-          padding: 8px;
-          width: 250px;
-          margin-bottom: 10px;
-        }
-
-        table {
-          width: 100%;
-          border-collapse: collapse;
-        }
-
-        th, td {
-          border: 1px solid #0e7dbe;
-          padding: 8px;
-        }
-
-        th {
-          background: #3e3bf3;
-          color: white;
-        }
-
-        button {
-          padding: 5px 10px;
-          border: none;
-          color: white;
-          border-radius: 5px;
-          cursor: pointer;
-        }
-
-        .approve { background: green; }
-        .reject { background: red; }
-
-        .toast {
-          background: #0f5ed7;
-          color: white;
-          padding: 10px;
-          margin-bottom: 10px;
-          text-align: center;
-        }
-
-        .notif-popup {
-          position: fixed;
-          right: 20px;
-          top: 60px;
-          width: 220px;
-          background: white;
-          color: #333;
-          padding: 10px;
-          border-radius: 10px;
-          box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-          z-index: 3000;
-        }
-        .modalOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.4);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 4000;
-}
-
-.modal {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  text-align: center;
-  width: 280px;
-  animation: scaleIn 0.3s ease;
-}
-
-.modalActions {
-  display: flex;
-  justify-content: space-around;
-  margin-top: 15px;
-}
-
-.modalActions button {
-  padding: 6px 12px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.modalActions button:first-child {
-  background: #ccc;
-}
-
-.modalActions button:last-child {
-  background: red;
-  color: white;
-}
-
-@keyframes scaleIn {
-  from { transform: scale(0.8); }
-  to { transform: scale(1); }
-}
-  .filter-menu {
-  position: absolute;
-  right: 0;
-  top: 100px; 
-  background: ;
-  border-radius: 10px;
-  width: 150px;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-  
-}
-.filter-menu .item {
-  padding: 10px;
-  cursor: pointer;
-}
-.filter-menu .item:hover {
-  background: #f2f2f2;
-}
-
-      `}</style>
-    </div>
-  );
 }

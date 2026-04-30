@@ -26,7 +26,29 @@ const getUserByPrenom = async (prenom) => {
   );
 };
 
+// ✅ GET USER BY ID
+const getUserById = async (id) => {
+  return await db.query(
+    'SELECT * FROM users WHERE id = $1',
+    [id]
+  );
+};
+
+// ✅ UPDATE USER BY ID
+const updateUserById = async (id, userData) => {
+  const { nom, prenom, age, sexe, adresse, email, phone, cin } = userData;
+
+  return await db.query(
+    `UPDATE users 
+     SET nom=$1, prenom=$2, age=$3, sexe=$4, adresse=$5, email=$6, phone=$7, cin=$8
+     WHERE id=$9 RETURNING *`,
+    [nom, prenom, age, sexe, adresse, email, phone, cin, id]
+  );
+};
+
 module.exports = {
   createUser,
-  getUserByPrenom
+  getUserByPrenom,
+  getUserById,
+  updateUserById
 };

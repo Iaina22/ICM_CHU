@@ -10,16 +10,13 @@ function Login() {
   const navigate = useNavigate();
 
   const handleSubmit = async () => {
-
-    // ===== ADMIN =====
     if (prenom === "Admin" && password === "azerty12") {
       navigate("/Adminhome");
       return;
     }
 
-    // ===== STOCK =====
     if (prenom === "Stock" && password === "stock12") {
-      navigate("/Stock");
+      navigate("/UserStock");
       return;
     }
 
@@ -33,38 +30,29 @@ function Login() {
       const data = await res.json();
 
       if (data.success) {
-
         if (data.user.status === 'active') {
-           localStorage.setItem("userId", data.user.id);
+          localStorage.setItem("userId", data.user.id);
           setModal("✅ Connexion réussie !");
-
           setTimeout(() => {
             setModal('');
             setPrenom('');
             setPassword('');
             navigate("/UserArticle");
           }, 1500);
-        }
-
-        else if (data.user.status === 'pending') {
+        } else if (data.user.status === 'pending') {
           setModal("⏳ Compte pas encore validé par l'administrateur");
-           setTimeout(() => {
-          navigate("/");
-        }, 2000);
-        }
-
-        else if (data.user.status === 'rejected') {
+          setTimeout(() => {
+            navigate("/");
+          }, 2000);
+        } else if (data.user.status === 'rejected') {
           setModal("❌ Compte refusé par l'admin");
-           setTimeout(() => {
-          navigate("/");
-        }, 2000);
+          setTimeout(() => {
+            navigate("/");
+          }, 2000);
         }
-
       } else {
         setModal("❌ Utilisateur introuvable ou mot de passe incorrect");
-        
       }
-
     } catch (error) {
       console.error(error);
       setModal("❌ Erreur serveur");
@@ -72,149 +60,62 @@ function Login() {
   };
 
   return (
-    <div className="container">
-      
-       <Navbar />
+    <div className="h-screen flex justify-center items-center bg-gray-100 dark:bg-gray-900">
+      <Navbar />
+
       {/* ===== MODAL ===== */}
       {modal && (
-        <div className="modal-overlay">
-          <div className="modal-box">
-            <p>{modal}</p>
-            <button onClick={() => setModal('')}>OK</button>
+        <div className="fixed inset-0 bg-black/60 flex justify-center items-center z-50">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-xl text-center w-72">
+            <p className="text-sm text-gray-800 dark:text-gray-200">{modal}</p>
+            <button
+              onClick={() => setModal('')}
+              className="mt-3 px-4 py-2 bg-blue-600 text-white rounded-md"
+            >
+              OK
+            </button>
           </div>
         </div>
       )}
 
       {/* ===== LOGIN CARD ===== */}
-      <div className="login-card">
-       
+      <div className="bg-white/70 dark:bg-gray-800/80 backdrop-blur-md p-8 rounded-2xl w-72 text-center shadow-lg">
+        <h2 className="mb-5 text-xl font-bold text-blue-500">Connectez-vous</h2>
 
-        <h2>Connectez-vous</h2>
-
-        <div className="form-group">
-          <label>Prénom</label>
+        <div className="text-left mb-3">
+          <label className="text-xs text-gray-600 dark:text-gray-300">Prénom</label>
           <input
             type="text"
             value={prenom}
             onChange={(e) => setPrenom(e.target.value)}
+            className="w-full p-2 rounded-lg border border-gray-300 dark:border-gray-600 mt-1 text-sm"
           />
         </div>
 
-        <div className="form-group">
-          <label>Mot de passe</label>
+        <div className="text-left mb-3">
+          <label className="text-xs text-gray-600 dark:text-gray-300">Mot de passe</label>
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            className="w-full p-2 rounded-lg border border-gray-300 dark:border-gray-600 mt-1 text-sm"
           />
         </div>
 
-        {/* ===== FORGOT PASSWORD (FIXED) ===== */}
-        <div className="forgot-password" >
-    <Link to="/Mdpoublier"  className="forgot-link">
-  Mot de passe oublié ?
-</Link>
+        {/* ===== FORGOT PASSWORD ===== */}
+        <div className="text-right mb-3">
+          <Link to="/Mdpoublier" className="text-xs text-green-700 dark:text-green-400 hover:underline">
+            Mot de passe oublié ?
+          </Link>
         </div>
 
-        <button onClick={handleSubmit}>Se connecter</button>
+        <button
+          onClick={handleSubmit}
+          className="w-full p-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-lg font-bold text-sm"
+        >
+          Se connecter
+        </button>
       </div>
-
-      {/* ===== CSS ===== */}
-      <style>{`
-
-        .container {
-          height: 100vh;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        .login-card {
-          background: rgba(255,255,255,0.7);
-          backdrop-filter: blur(12px);
-          padding: 40px;
-          border-radius: 20px;
-          width: 250px;
-          text-align: center;
-          box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-        }
-
-        .login-card h2 {
-          margin-bottom: 20px;
-          color: #75a7f1;
-        }
-
-        .form-group {
-          text-align: left;
-          margin-bottom: 12px;
-        }
-
-        .form-group label {
-          font-size: 13px;
-          color: gray;
-        }
-
-        .login-card input {
-          width: 100%;
-          padding: 10px;
-          border-radius: 10px;
-          border: 1px solid #ddd;
-        }
-
-        .login-card button {
-          width: 100%;
-          padding: 10px;
-          background: linear-gradient(135deg, #0f5ed7, #206fe6);
-          color: white;
-          border: none;
-          border-radius: 10px;
-          cursor: pointer;
-          font-weight: bold;
-        }
-        .forgot-link {
-        font-size: 12px;
-        color: #0b851f;
-        text-decoration: none;
-        text-align: end;
-  
-      }
-
-      .forgot-link:hover {
-        text-decoration: underline;
-      }
-        /* ===== MODAL ===== */
-        .modal-overlay {
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: rgba(0,0,0,0.6);
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          z-index: 9999;
-        }
-
-        .modal-box {
-          background: white;
-          padding: 20px;
-          border-radius: 12px;
-          text-align: center;
-          width: 280px;
-        }
-
-        .modal-box button {
-          margin-top: 10px;
-          padding: 6px 15px;
-          background: #0f5ed7;
-          color: white;
-          border: none;
-          border-radius: 6px;
-          cursor: pointer;
-        }
-
-      `}</style>
     </div>
   );
 }

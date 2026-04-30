@@ -7,8 +7,11 @@ function Navbar() {
   const [theme, setTheme] = useState("light");
 
   useEffect(() => {
-    document.body.classList.remove("light", "dark");
-    document.body.classList.add(theme);
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
   }, [theme]);
 
   const toggleTheme = () => {
@@ -16,118 +19,42 @@ function Navbar() {
   };
 
   return (
-    <>
-      <nav className="navbar">
-        <div>
-  <Link
-    to="/"
-    style={{
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      textDecoration: "none"
-    }}
-  >
-    <img
-      style={{ width: "90px" }}
-      src={logo}
-      alt="logo"
-    />
-
-    <h1
-      style={{
-        color: "#0a54c4",
-        fontSize: "16px",
-        fontWeight: "bold",
-        marginTop: "5px",
-        marginBottom: 0
-      }}
+    <nav
+      className="fixed top-2 left-1/2 -translate-x-1/2 w-[90%] z-[1000] 
+                 flex justify-between items-center px-4 py-2
+                 md:bg-white/65 md:backdrop-blur-md md:border md:border-black/10 md:rounded-xl md:shadow-md
+                 transition duration-300
+                 dark:md:bg-[rgba(30,30,30,0.6)] dark:md:border dark:md:border-white/20"
     >
-      CHU Anosiala
-    </h1>
-  </Link>
-</div>
+      {/* LOGO */}
+      <Link to="/" className="flex flex-col items-center no-underline">
+        <img src={logo} alt="logo" className="w-[60px] md:w-[90px]" />
+        <h1 className="text-black dark:text-white text-[12px] md:text-[16px] font-bold mt-1 mb-0">
+          CHU Anosiala
+        </h1>
+      </Link>
 
-        <ul className="nav-links">
-          <Link to="/Register" className="btn-login">S'inscription</Link>
-          <li
-  onClick={toggleTheme}
-  style={{
-    cursor: "pointer",
-    display: "flex",
-    alignItems: "center"
-  }}
->
-  {theme === "light" ? (
-    <Moon size={22} />
-  ) : (
-    <Sun size={22} />
-  )}
-</li>
-        </ul>
-      </nav>
+      {/* LINKS */}
+      <ul className="flex gap-4 items-center">
+        <Link
+          to="/Register"
+          className="px-3 py-1 md:px-6 md:py-2 
+                     bg-black text-white 
+                     dark:bg-blue-600 dark:text-white
+                     border-2 border-transparent rounded-md md:rounded-lg font-bold 
+                     text-xs md:text-base hover:opacity-90"
+        >
+          S'inscription
+        </Link>
 
-      <style>{`
-      .navbar {
-  position: fixed;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90%;
-  z-index: 1000;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 6px 15px;
-
-  background: rgba(255, 255, 255, 0.65);
-  backdrop-filter: blur(10px);
-
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  border-radius: 12px;
-
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-
-  transition: 0.3s;
-}
-
-        .nav-links {
-          list-style: none;
-          display: flex;
-          gap: 25px;
-          align-items: center;
-        }
-
-        .nav-links a {
-          text-decoration: none;
-          color:  #0f5ed7;
-          font-weight: 700;
-          transition: 0.3s;
-        }
-
-        .nav-links a:hover {
-          color: #206fe6;
-          text-decoration: underline;
-        }
-
-        .btn-login {
-         padding: 10px 25px;
-           background: white;
-          color: #0f5ed7;
-          border: 2px solid #0f5ed7;
-          border-radius: 8px;
-          text-decoration: none;
-          font-weight: bold;
-        }
-           .btn-outline {
-         
-        }
-
-
-        
-      `}</style>
-    </>
+        <li
+          onClick={toggleTheme}
+          className="cursor-pointer flex items-center"
+        >
+          {theme === "light" ? <Moon size={18} className="md:w-[22px]" /> : <Sun size={18} className="md:w-[22px]" />}
+        </li>
+      </ul>
+    </nav>
   );
 }
 

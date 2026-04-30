@@ -46,6 +46,7 @@ io.on("connection", (socket) => {
 app.use(cors());
 app.use(express.json());
 app.use("/api", authRoutes);
+app.use('/api/user', authRoutes);
 
 
 // ======================
@@ -272,7 +273,7 @@ app.get('/api/user/:id', async (req, res) => {
 
   try {
     const result = await db.query(
-      'SELECT id, nom, prenom, age, sexe, email, phone, role, status FROM users WHERE id = $1',
+      'SELECT id, nom, prenom, age, sexe, email,cin,adresse, phone, role, status FROM users WHERE id = $1',
       [id]
     );
 

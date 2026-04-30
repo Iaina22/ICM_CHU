@@ -6,7 +6,10 @@ import Adminhome from "../pages/Admin/Adminhome";
 import Article from "../pages/Admin/Article";
 import Profile from "../pages/Profile";
 import Stock from "../pages/Admin/Stock";
+import UserStock from "../pages/Stock/Stock";
 import UserArticle from "../pages/User/UserArticle";
+import EditProfile from "../pages/EditProfile";
+
 
 function AppRoutes() {
   return (
@@ -16,9 +19,11 @@ function AppRoutes() {
       <Route path="/login" element={<Login />} />
       <Route path="/adminhome" element={<Adminhome />} />
       <Route path="/article" element={<Article />} />
+      <Route path="/UserStock" element={<UserStock />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/stock" element={<Stock />} />
       <Route path="/userArticle" element={<UserArticle />} />
+      <Route path="/editProfile" element={<EditProfile />} />
     </Routes>
   );
 }

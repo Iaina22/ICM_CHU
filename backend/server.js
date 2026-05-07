@@ -3,13 +3,13 @@ const bcrypt = require('bcrypt');
 const cors = require('cors');
 const db = require('./db');
 const authRoutes = require('./routes/authRoutes');
-
 const http = require("http");
 const { Server } = require("socket.io");
-
 const app = express();
-
 const server = http.createServer(app);
+const articleRoutes = require("./routes/articleRoutes");
+const categorieRoutes = require("./routes/categorieRoutes");
+
 
 const io = new Server(server, {
   cors: {
@@ -46,9 +46,43 @@ io.on("connection", (socket) => {
 app.use(cors());
 app.use(express.json());
 app.use("/api", authRoutes);
-app.use('/api/user', authRoutes);
+app.use("/api/articles", articleRoutes);
+app.use("/api/categories", categorieRoutes);
+app.use("/api/auth", authRoutes);
+app.put("/api/articles/:id", async (req, res) => {
 
+  const { id } = req.params;
+  const { stock } = req.body;
 
+  try {
+
+    await db.query(
+      `
+      UPDATE articles
+      SET
+        stock = $1,
+        created_at = CURRENT_TIMESTAMP
+      WHERE id = $2
+      `,
+      [stock, id]
+    );
+
+    res.json({
+      message: "Article updated",
+    });
+
+  } catch (error) {
+
+    console.log("UPDATE ERROR :", error);
+
+    res.status(500).json({
+      message: "Erreur serveur",
+      error: error.message,
+    });
+
+  }
+
+});
 // ======================
 // INSCRIPTION
 // ======================

@@ -79,7 +79,7 @@ function Login() {
       )}
 
       {/* ===== LOGIN CARD ===== */}
-      <div className="bg-white/70 dark:bg-gray-800/80 backdrop-blur-md p-8 rounded-2xl w-72 text-center shadow-lg">
+      <div className="bg-white/70 dark:bg-gray-800/80 backdrop-blur-md p-8 -mt-20 md:mt-20 rounded-2xl w-72 text-center shadow-lg">
         <h2 className="mb-5 text-xl font-bold text-blue-500">Connectez-vous</h2>
 
         <div className="text-left mb-3">

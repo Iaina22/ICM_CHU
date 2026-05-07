@@ -1,14 +1,48 @@
-const express = require('express');
-const router = express.Router();
-const authController = require('../controllers/authController');
+const express = require("express");
 
-router.post('/register', authController.register);
-router.post('/login', authController.login);
+const router = express.Router();
+
+const authController =
+require("../controllers/authController");
+
+
+// =============================
+// AUTH
+// =============================
+
+router.post(
+  "/register",
+  authController.register
+);
+
+router.post(
+  "/login",
+  authController.login
+);
+
+
+// =============================
+// USER
+// =============================
 
 // ✅ GET USER BY ID
-router.get('/:id', authController.getUser);
+// exemple:
+// /api/auth/user/1
+
+router.get(
+  "/user/:id",
+  authController.getUser
+);
+
 
 // ✅ UPDATE USER
-router.put('/:id', authController.updateUser);
+// exemple:
+// /api/auth/user/1
+
+router.put(
+  "/user/:id",
+  authController.updateUser
+);
+
 
 module.exports = router;

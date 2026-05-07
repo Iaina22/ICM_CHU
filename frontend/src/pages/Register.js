@@ -125,9 +125,8 @@ export default function Register() {
       </div>
     )}
 
-    {/* CARD */}
-    <div className="w-[95%] max-w-sm  md:max-w-[950px] md:h-[500px] bg-white dark:bg-gray-800 rounded-xl flex flex-col md:flex-row overflow-hidden shadow-2xl">
-      
+  <div className="w-[80%] mt-2 max-w-sm md:max-w-[800px] bg-white dark:bg-gray-800 rounded-xl flex flex-col md:flex-row overflow-hidden shadow-2xl">
+
       {/* LEFT (hidden on phone, visible on PC) */}
       <div className="hidden md:flex w-1/2 bg-gradient-to-br from-blue-700 to-blue-400 relative flex-col justify-center items-center text-white rounded-tr-[120px] rounded-br-[120px] overflow-hidden">
         <div className="z-10 -mt-20 text-center">
@@ -149,14 +148,14 @@ export default function Register() {
           {step === 1 && (
             <>
               <input type="text" name="nom" placeholder="Nom" value={formData.nom} onChange={handleChange} required
-                className="p-2 rounded-lg border border-gray-300 focus:border-blue-600 w-full md:w-4/5" />
+                className="p-1 rounded-lg border border-gray-300 focus:border-blue-600 w-full md:w-4/5" />
               <input type="text" name="prenom" placeholder="Prénom" value={formData.prenom} onChange={handleChange} required
-                className="p-2 rounded-lg border border-gray-300 focus:border-blue-600 w-full md:w-4/5" />
+                className="p-1 rounded-lg border border-gray-300 focus:border-blue-600 w-full md:w-4/5" />
               <input type="number" name="age" placeholder="Âge" min="0" value={formData.age} onChange={handleChange} required
-                className="p-2 rounded-lg border border-gray-300 focus:border-blue-600 w-full md:w-4/5" />
+                className="p-1 rounded-lg border border-gray-300 focus:border-blue-600 w-full md:w-4/5" />
 
               <select name="sexe" value={formData.sexe} onChange={handleChange} required
-                className="p-2 rounded-lg border border-gray-300 focus:border-blue-600 w-full md:w-4/5">
+                className="p-1 rounded-lg border border-gray-300 focus:border-blue-600 w-full md:w-4/5">
                 <option value="">Sexe</option>
                 <option value="Homme">Homme</option>
                 <option value="Femme">Femme</option>
@@ -173,7 +172,7 @@ export default function Register() {
                   setFormData({ ...formData, cin: formatted });
                 }}
                 required
-                className="p-2 rounded-lg border border-gray-300 focus:border-blue-600 w-full md:w-4/5"
+                className="p-1 rounded-lg border border-gray-300 focus:border-blue-600 w-full md:w-4/5"
               />
 
               {/* Téléphone script mitovy */}
@@ -197,11 +196,11 @@ export default function Register() {
                 }}
                 maxLength="13"
                 required
-                className="p-2 rounded-lg border border-gray-300 focus:border-blue-600 w-full md:w-4/5"
+                className="p-1 rounded-lg border border-gray-300 focus:border-blue-600 w-full md:w-4/5"
               />
 
               <button type="button" onClick={() => setStep(2)}
-                className="w-full md:w-4/5 p-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700">
+                className="w-full md:w-4/5 p-1 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700">
                 Suivant
               </button>
             </>
@@ -210,12 +209,12 @@ export default function Register() {
           {step === 2 && (
             <>
               <input type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} required
-                className="p-2 rounded-lg border border-gray-300 focus:border-blue-600 w-full md:w-4/5" />
+                className="p-1 rounded-lg border border-gray-300 focus:border-blue-600 w-full md:w-4/5" />
               <input type="text" name="adresse" placeholder="Adresse" value={formData.adresse} onChange={handleChange} required
-                className="p-2 rounded-lg border border-gray-300 focus:border-blue-600 w-full md:w-4/5" />
+                className="p-1 rounded-lg border border-gray-300 focus:border-blue-600 w-full md:w-4/5" />
 
               <select name="role" value={formData.role} onChange={handleChange} required
-                className="p-2 rounded-lg border border-gray-300 focus:border-blue-600 w-full md:w-4/5">
+                className="p-1 rounded-lg border border-gray-300 focus:border-blue-600 w-full md:w-4/5">
                 <option value="">Choisir un rôle</option>
                 <option value="Admin">Admin</option>
                 <option value="Comptable">Comptable</option>
@@ -224,17 +223,17 @@ export default function Register() {
               </select>
 
               <input type="password" name="mdp" placeholder="Mot de passe" value={formData.mdp} onChange={handleChange} required
-                className="p-2 rounded-lg border border-gray-300 focus:border-blue-600 w-full md:w-4/5" />
+                className="p-1 rounded-lg border border-gray-300 focus:border-blue-600 w-full md:w-4/5" />
               <input type="password" name="confirmMdp" placeholder="Confirmer mot de passe" value={formData.confirmMdp} onChange={handleChange} required
-                className="p-2 rounded-lg border border-gray-300 focus:border-blue-600 w-full md:w-4/5" />
+                className="p-1 rounded-lg border border-gray-300 focus:border-blue-600 w-full md:w-4/5" />
 
               <div className="flex flex-col gap-3 mt-3 w-full md:w-4/5">
                 <button type="button" onClick={() => setStep(1)}
-                  className="p-2 border border-green-600 text-white bg-green-600 rounded-lg font-bold hover:bg-green-700">
+                  className="p-1 border border-green-600 text-white bg-green-600 rounded-lg font-bold hover:bg-green-700">
                   Retour
                 </button>
                 <button type="submit"
-                  className="p-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700">
+                  className="p-1 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700">
                   S'inscrire
                 </button>
               </div>

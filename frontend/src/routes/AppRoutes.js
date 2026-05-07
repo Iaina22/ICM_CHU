@@ -24,6 +24,7 @@ function AppRoutes() {
       <Route path="/stock" element={<Stock />} />
       <Route path="/userArticle" element={<UserArticle />} />
       <Route path="/editProfile" element={<EditProfile />} />
+      
     </Routes>
   );
 }

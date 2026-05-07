@@ -43,7 +43,7 @@ function Home() {
         {/* LEFT */}
         <div className="flex flex-col justify-center w-full md:w-[45%] mt-5 md:-mt-[10%]" id="articles">
           <h1 className="text-[24px] md:text-[36px] mb-2 text-[#0f5ed7] font-bold">Compta Matière CHU.</h1>
-          <p className="text-[14px] md:text-[18px] mb-8">
+          <p className="text-[14px] md:text-[18px] mb-8 text-dark font-light">
             Optimisez la gestion des matières hospitalières avec MediGestion.
             Notre application web vous permet de suivre avec précision les stocks et les mouvements de matériel au sein du CHU Anosiala.
             Assurez une traçabilité complète et une sécurité renforcée pour chaque matière médicale.

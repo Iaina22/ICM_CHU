@@ -42,10 +42,10 @@ function Navbar() {
 
       {/* DESKTOP LINKS */}
       <ul className="hidden md:flex list-none gap-6 items-center">
-        <li><a href="#articles" className="text-[#0f5ed7] font-bold hover:text-[#206fe6] hover:underline">Articles</a></li>
-        <li><a href="#stocks" className="text-[#0f5ed7] font-bold hover:text-[#206fe6] hover:underline">Gestion des stock</a></li>
-        <li><a href="#demandes" className="text-[#0f5ed7] font-bold hover:text-[#206fe6] hover:underline">Demandes</a></li>
-        <li><a href="#contacts" className="text-[#0f5ed7] font-bold hover:text-[#206fe6] hover:underline">Contacts</a></li>
+        <li><a href="#articles" className="text-[#0f5ed7]  hover:text-[#206fe6] hover:underline">Articles</a></li>
+        <li><a href="#stocks" className="text-[#0f5ed7] hover:text-[#206fe6] hover:underline">Gestion des stock</a></li>
+        <li><a href="#demandes" className="text-[#0f5ed7]  hover:text-[#206fe6] hover:underline">Demandes</a></li>
+        <li><a href="#contacts" className="text-[#0f5ed7]  hover:text-[#206fe6] hover:underline">Contacts</a></li>
 
         <Link to="/login" className="px-6 py-2 bg-white text-[#0f5ed7] border-2 border-[#0f5ed7] rounded-lg font-bold hover:opacity-90">
           Connexion
@@ -80,10 +80,10 @@ function Navbar() {
       {open && (
         <div className="absolute top-full left-0 w-full bg-gray-200 dark:bg-[#2a2a2a] shadow-md md:hidden">
           <ul className="flex flex-col items-center gap-4 py-4">
-            <li><a href="#articles" onClick={handleOptionClick} className="text-[#0f5ed7] font-bold">Articles</a></li>
-            <li><a href="#stocks" onClick={handleOptionClick} className="text-[#0f5ed7] font-bold">Gestion des stock</a></li>
-            <li><a href="#demandes" onClick={handleOptionClick} className="text-[#0f5ed7] font-bold">Demandes</a></li>
-            <li><a href="#contacts" onClick={handleOptionClick} className="text-[#0f5ed7] font-bold">Contacts</a></li>
+            <li><a href="#articles" onClick={handleOptionClick} className="text-[#0f5ed7] ">Articles</a></li>
+            <li><a href="#stocks" onClick={handleOptionClick} className="text-[#0f5ed7] ">Gestion des stock</a></li>
+            <li><a href="#demandes" onClick={handleOptionClick} className="text-[#0f5ed7] ">Demandes</a></li>
+            <li><a href="#contacts" onClick={handleOptionClick} className="text-[#0f5ed7] ">Contacts</a></li>
           </ul>
         </div>
       )}

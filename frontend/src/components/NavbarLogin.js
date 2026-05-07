@@ -36,16 +36,10 @@ function Navbar() {
 
       {/* LINKS */}
       <ul className="flex gap-4 items-center">
-        <Link
-          to="/Register"
-          className="px-3 py-1 md:px-6 md:py-2 
-                     bg-black text-white 
-                     dark:bg-blue-600 dark:text-white
-                     border-2 border-transparent rounded-md md:rounded-lg font-bold 
-                     text-xs md:text-base hover:opacity-90"
-        >
-          S'inscription
+         <Link to="/Register" className="px-6 py-2 bg-white text-[#0f5ed7] border-2 border-[#0f5ed7] rounded-lg font-bold hover:opacity-90">
+          S'inscrire
         </Link>
+
 
         <li
           onClick={toggleTheme}

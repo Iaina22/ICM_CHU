@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Moon, Sun } from "lucide-react";
 import logo from "../assets/images/log.png";
-import { FiUser, FiMenu } from "react-icons/fi";
+import {FiMenu } from "react-icons/fi";
 
 function Navbar() {
   const [theme, setTheme] = useState("light");
@@ -22,11 +22,12 @@ function Navbar() {
 
   return (
     <nav
-      className="fixed top-0 left-0 w-full z-[1000]
+      className="fixed top-0 left-0 w-full z-[1000] 
                  flex justify-between items-center px-4 py-2
-                 bg-gray-300 md:bg-white/70 md:backdrop-blur-md md:border md:border-black/10 md:rounded-xl md:shadow-md
+                 md:left-1/2 md:-translate-x-1/2 md:w-[90%] 
+                 md:bg-white/65 md:backdrop-blur-md md:border md:border-black/10 md:rounded-xl md:shadow-md
                  transition duration-300
-                 dark:bg-gray-900 dark:md:bg-gray-800 dark:md:border-white/20"
+                 dark:md:bg-[rgba(30,30,30,0.6)] dark:md:border dark:md:border-white/20"
     >
       {/* LOGO */}
       <Link to="/" className="flex flex-col items-center no-underline">
@@ -40,7 +41,7 @@ function Navbar() {
       <ul className="flex gap-3 md:gap-6 items-center text-xs md:text-base font-semibold">
         {/* PC links (blue) */}
         <li className="hidden md:block">
-          <Link to="/articles" className="text-blue-600 hover:text-blue-700 hover:underline">
+          <Link to="/article" className="text-blue-600 hover:text-blue-700 hover:underline">
             Articles
           </Link>
         </li>
@@ -50,8 +51,8 @@ function Navbar() {
           </Link>
         </li>
         <li className="hidden md:block">
-          <Link to="/fournisseurs" className="text-blue-600 hover:text-blue-700 hover:underline">
-            Fournisseurs
+          <Link to="/adminhome" className="text-blue-600 hover:text-blue-700 hover:underline">
+            Utilisateurs 
           </Link>
         </li>
         <li className="hidden md:block">
@@ -60,10 +61,7 @@ function Navbar() {
           </Link>
         </li>
 
-        {/* USER ICON */}
-        <li>
-          <FiUser className="w-4 h-4 md:w-6 md:h-6 text-black dark:text-white" />
-        </li>
+        
 
         {/* Hamburger menu for phone (black text) */}
         <li className="md:hidden relative">
@@ -75,16 +73,16 @@ function Navbar() {
           </button>
           {menuOpen && (
             <div className="absolute right-0 top-10 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-3 flex flex-col gap-2">
-              <Link to="/articles" onClick={() => setMenuOpen(false)} className="text-black dark:text-white hover:underline">
+              <Link to="/article" onClick={() => setMenuOpen(false)} className="text-blue-600 dark:text-white hover:underline">
                 Articles
               </Link>
-              <Link to="/mouvements" onClick={() => setMenuOpen(false)} className="text-black dark:text-white hover:underline">
+              <Link to="/mouvements" onClick={() => setMenuOpen(false)} className="text-blue-600 dark:text-white hover:underline">
                 Entrées / Sorties
               </Link>
-              <Link to="/Adminhome" onClick={() => setMenuOpen(false)} className="text-black dark:text-white hover:underline">
+              <Link to="/adminhome" onClick={() => setMenuOpen(false)} className="text-blue-600 dark:text-white hover:underline">
                 Utilisateurs
               </Link>
-              <Link to="/demandes" onClick={() => setMenuOpen(false)} className="text-black dark:text-white hover:underline">
+              <Link to="/demandes" onClick={() => setMenuOpen(false)} className="text-blue-600 dark:text-white hover:underline">
                 Demandes
               </Link>
             </div>

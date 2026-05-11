@@ -1,93 +1,143 @@
-const articleModel =
-require("../models/articleModel");
+const Article = require("../models/articleModel");
 
-
-// GET
-const getAllArticles =
-async (req, res) => {
-
+// GET ALL
+exports.getArticles = async (req, res) => {
   try {
-
-    const articles =
-      await articleModel.getArticles();
-
-    res.json(articles);
-
-  } catch (error) {
-
-    console.log(error);
-
-    res.status(500).json({
-      error: "Erreur serveur",
-    });
-
+    const { rows } = await Article.getAll();
+    res.json(rows);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "GET ARTICLES ERROR" });
   }
 };
 
+// ADD ARTICLE
+exports.addArticle = async (req, res) => {
+  try {
+    const {
+      ref_cat,
+      code_compta,
+      produit,
+      designation,
+      stock,
+      nom_cat
+    } = req.body;
 
-// ADD
-const createArticle =
-async (req, res) => {
+    const ref_art = "ART-" + Date.now();
+
+    await Article.insert({
+      ref_art,
+      ref_cat,
+      code_compta,
+      nom_cat,
+      produit,
+      designation,
+      stock
+    });
+
+    res.json({ message: "Article ajouté" });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "INSERT ERROR" });
+  }
+};
+
+// UPDATE STOCK
+exports.updateStock = async (req, res) => {
+  try {
+
+    const { stock } = req.body;
+
+    await Article.updateStock(req.params.id, stock);
+
+    res.json({ message: "Stock updated" });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "UPDATE ERROR" });
+  }
+};
+exports.addArticle = async (req, res) => {
 
   try {
 
     const {
       ref_cat,
+      code_compta,
       produit,
       designation,
       stock,
+      nom_cat
     } = req.body;
 
-    const article =
-      await articleModel.addArticle(
-        ref_cat,
-        produit,
-        designation,
-        stock
-      );
+    // ================= PREFIX =================
+    const prefixes = {
+      MED: "MED",
+      INF: "INF",
+      MOB: "MOB",
+      LAB: "LAB",
+      URG: "URG",
+      CONS: "CONS",
+      PHM: "PHM",
+      ENT: "ENT",
+      TEC: "TEC",
+      LOG: "LOG",
+    };
 
-    res.status(201).json(article);
+    const prefix = prefixes[ref_cat] || "GEN";
 
-  } catch (error) {
+    // ================= GET ALL =================
+    const { rows } = await Article.getAll();
 
-    console.log(error);
-
-    res.status(500).json({
-      error: "Erreur serveur",
-    });
-
-  }
-};
-
-
-// DELETE
-const removeArticle =
-async (req, res) => {
-
-  try {
-
-    await articleModel.deleteArticle(
-      req.params.id
+    // filtre par catégorie
+    const sameCat = rows.filter(
+      (a) => a.ref_cat === ref_cat && a.ref_art
     );
 
+    // ================= FIND LAST NUMBER =================
+    let lastNumber = 0;
+
+    sameCat.forEach((a) => {
+
+      const parts = a.ref_art.split("-");
+
+      const num = parseInt(parts[2]);
+
+      if (!isNaN(num) && num > lastNumber) {
+        lastNumber = num;
+      }
+
+    });
+
+    // ================= NEXT NUMBER =================
+    const nextNumber = lastNumber + 1;
+
+    const formattedNumber =
+      String(nextNumber).padStart(3, "0");
+
+    // ================= FIXED REF =================
+    const ref_art =
+      `ART-${prefix}-${formattedNumber}`;
+
+    // ================= INSERT =================
+    await Article.insert({
+      ref_art,
+      ref_cat,
+      code_compta,
+      nom_cat,
+      produit,
+      designation,
+      stock
+    });
+
     res.json({
-      message: "Article supprimé",
+      message: "Article ajouté",
+      ref_art
     });
 
-  } catch (error) {
-
-    console.log(error);
-
-    res.status(500).json({
-      error: "Erreur serveur",
-    });
-
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "INSERT ERROR" });
   }
-};
-
-
-module.exports = {
-  getAllArticles,
-  createArticle,
-  removeArticle,
 };

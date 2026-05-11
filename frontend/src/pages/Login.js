@@ -29,7 +29,26 @@ function Login() {
 
       const data = await res.json();
 
-      if (data.success) {
+            if (data.success) {
+if (data.success) {
+
+                  // ================= SAVE USER =================
+                  localStorage.setItem(
+                    "user",
+                    JSON.stringify(data.user)
+                  );
+
+                  localStorage.setItem(
+                    "prenom",
+                    data.user.prenom
+                  );
+
+                  localStorage.setItem(
+                    "role",
+                    data.user.role
+                  );
+                }
+
         if (data.user.status === 'active') {
           localStorage.setItem("userId", data.user.id);
           setModal("✅ Connexion réussie !");

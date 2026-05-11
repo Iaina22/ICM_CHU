@@ -4,14 +4,16 @@ import { FiEdit, FiLogOut } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 
 function Profile() {
+
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [showLogoutModal, setShowLogoutModal] = useState(false); // ✅ state modal
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const navigate = useNavigate();
 
   const userId = localStorage.getItem("userId");
 
   useEffect(() => {
+
     if (!userId) return;
 
     fetch(`http://localhost:5000/api/user/${userId}`)
@@ -20,215 +22,162 @@ function Profile() {
         setUser(data);
         setLoading(false);
       })
-      .catch((err) => {
-        console.error(err);
-        setLoading(false);
-      });
+      .catch(() => setLoading(false));
+
   }, [userId]);
 
-  if (loading) return <p style={{ textAlign: "center" }}>Chargement...</p>;
-  if (!user) return <p style={{ textAlign: "center" }}>Utilisateur introuvable</p>;
+  if (loading)
+    return <p className="text-center mt-10">Chargement...</p>;
+
+  if (!user)
+    return <p className="text-center mt-10">Utilisateur introuvable</p>;
 
   return (
-    <div className="container">
+
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+
       <Navbar />
 
-      <div className="layout">
-        {/* Fenêtre kely ankavia */}
-        <div className="side-window">
-          <h4>Paramètres</h4>
-          <button onClick={() => navigate("/editProfile")}>
-            <FiEdit className="icon" />
-            <span>Modification</span>
-          </button>
-          <button onClick={() => setShowLogoutModal(true)}>
-            <FiLogOut className="icon" />
-            <span>Déconnexion</span>
-          </button>
-        </div>
+      <div className="mt-24 flex justify-center px-3">
 
-        {/* Profile card ankavanana */}
-        <div className="profile-card">
-          <div className="avatar">{user.prenom?.charAt(0).toUpperCase()}</div>
-          <h3 className="name">{user.prenom}</h3>
-          <p className="role">{user.role}</p>
+        <div className="w-full max-w-md bg-white dark:bg-gray-800 shadow-xl rounded-2xl p-5">
 
-          <div className="info-box">
-            <div className="info"><strong>Nom:</strong> {user.nom}</div>
-            <div className="info"><strong>Prénom:</strong> {user.prenom}</div>
-            <div className="info"><strong>Âge:</strong> {user.age}</div>
-            <div className="info"><strong>Sexe:</strong> {user.sexe}</div>
-            <div className="info"><strong>CIN:</strong> {user.cin}</div>
-            <div className="info"><strong>Adresse:</strong> {user.adresse}</div>
-            <div className="info"><strong>Email:</strong> {user.email}</div>
-            <div className="info"><strong>Téléphone:</strong> {user.phone}</div>
-            <div className="info">
-              <strong>Status:</strong>
-              <span className={`status ${user.status}`}>{user.status}</span>
+          {/* HEADER */}
+          <div className="flex flex-col items-center">
+
+            <div className="w-20 h-20 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 text-white text-3xl flex items-center justify-center shadow">
+              {user.prenom?.charAt(0).toUpperCase()}
             </div>
+
+            <h3 className="mt-3 text-lg font-bold dark:text-white">
+              {user.prenom} {user.nom}
+            </h3>
+
+            <p className="text-sm text-gray-500 mt-1">
+              {user.role}
+            </p>
+
           </div>
+
+          {/* BUTTONS (EO AMBONY EMAIL) */}
+          <div className="mt-5 flex gap-3">
+
+            <button
+              onClick={() => navigate("/editProfile")}
+              className="flex-1 flex items-center justify-center gap-2 
+                         bg-transparent border border-blue-500 
+                         text-blue-600 hover:bg-blue-50 
+                         py-2 rounded-lg text-sm transition"
+            >
+              <FiEdit /> Modifier
+            </button>
+
+            <button
+              onClick={() => setShowLogoutModal(true)}
+              className="flex-1 flex items-center justify-center gap-2 
+                         bg-transparent border border-red-500 
+                         text-red-500 hover:bg-red-50 
+                         py-2 rounded-lg text-sm transition"
+            >
+              <FiLogOut /> Logout
+            </button>
+
+          </div>
+
+          {/* INFOS */}
+          <div className="mt-5 space-y-2 text-sm">
+
+            <div className="flex justify-between border-b pb-1">
+              <span className="text-gray-500">Email</span>
+              <span>{user.email}</span>
+            </div>
+
+            <div className="flex justify-between border-b pb-1">
+              <span className="text-gray-500">Téléphone</span>
+              <span>{user.phone}</span>
+            </div>
+
+            <div className="flex justify-between border-b pb-1">
+              <span className="text-gray-500">Adresse</span>
+              <span>{user.adresse}</span>
+            </div>
+
+            <div className="flex justify-between border-b pb-1">
+              <span className="text-gray-500">Sexe</span>
+              <span>{user.sexe}</span>
+            </div>
+
+            <div className="flex justify-between border-b pb-1">
+              <span className="text-gray-500">Âge</span>
+              <span>{user.age}</span>
+            </div>
+
+            <div className="flex justify-between border-b pb-1">
+              <span className="text-gray-500">CIN</span>
+              <span>{user.cin}</span>
+            </div>
+
+            <div className="flex justify-between items-center">
+              <span className="text-gray-500">Status</span>
+
+              <span className={`text-xs px-2 py-1 rounded-full text-white
+                ${
+                  user.status === "active"
+                    ? "bg-green-500"
+                    : user.status === "pending"
+                    ? "bg-orange-500"
+                    : "bg-red-500"
+                }`}
+              >
+                {user.status}
+              </span>
+
+            </div>
+
+          </div>
+
         </div>
+
       </div>
 
-     
-      {/* Modal Déconnexion */}
+      {/* MODAL */}
       {showLogoutModal && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <h3>Voulez-vous vraiment vous déconnecter ?</h3>
-            <div className="modal-actions">
+
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center">
+
+          <div className="bg-white dark:bg-gray-800 p-5 rounded-xl w-72 text-center">
+
+            <h3 className="text-base font-semibold dark:text-white">
+              Déconnexion ?
+            </h3>
+
+            <div className="flex gap-2 mt-4">
+
               <button
-                className="yes"
                 onClick={() => {
                   localStorage.clear();
-                  navigate("/"); 
+                  navigate("/");
                 }}
+                className="flex-1 bg-red-600 text-white py-2 rounded-lg"
               >
                 Oui
               </button>
-              <button className="no" onClick={() => setShowLogoutModal(false)}>
+
+              <button
+                onClick={() => setShowLogoutModal(false)}
+                className="flex-1 bg-gray-400 text-white py-2 rounded-lg"
+              >
                 Non
               </button>
+
             </div>
+
           </div>
+
         </div>
+
       )}
 
-      {/* CSS */}
-      <style>{`
-        .container { margin-top: 10%; margin-left:;10%
-        margin-rigth:10%; }
-        .layout {
-          display: flex;
-          justify-content: flex-start;
-          align-items: flex-start;
-          gap: 30px;
-          margin: 5% auto;
-          width: 90%;
-        }
-
-        .side-window {
-          background: #fff;
-          border-radius: 12px;
-          box-shadow: 0 5px 15px rgba(0,0,0,0.15);
-          padding: 20px;
-          display: flex;
-          flex-direction: column;
-          gap: 15px;
-          width: 180px;
-          height: fit-content;
-          position: sticky;
-          top: 100px;
-        }
-
-        .side-window h4 {
-          margin: 0 0 10px;
-          font-size: 16px;
-          text-align: center;
-        }
-
-        .side-window button {
-          background: #f9f9f9;
-          border: 1px solid #ddd;
-          border-radius: 8px;
-          padding: 10px;
-          font-size: 13px;
-          cursor: pointer;
-          transition: 0.3s;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-        }
-
-        .side-window button:hover { background: #e3f2fd; }
-        .side-window .icon { font-size: 20px; margin-bottom: 5px; }
-
-        .profile-card {
-          flex: 1;
-          background: #dee6e7c9;
-          border-radius: 20px;
-          box-shadow: 0 5px 25px rgba(177, 171, 171, 0.15);
-          padding: 10px;
-          text-align: center;
-          width:50%;
-        }
-
-        .avatar {
-          width: 100px;
-          height: 100px;
-          border-radius: 50%;
-          background: linear-gradient(135deg, #482fd4, #504dff);
-          color: white;
-          font-size: 48px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin: 0 auto 15px;
-          box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-
-        .name { font-size: 22px; font-weight: bold; margin-bottom: 3px; }
-        .role { font-size: 14px; color: #666; margin-bottom: 15px; }
-
-        .info-box {
-          background: rgba(255,255,255,0.95);
-          border-radius: 15px;
-          box-shadow: 0 5px 15px rgba(0,0,0,0.15);
-          padding: 20px;
-          text-align: left;
-          width:50%;
-          margin-left:25%;
-        }
-
-        .info { font-size: 14px; margin-bottom: 12px; }
-
-        .status { padding: 4px 10px; border-radius: 12px; font-size: 12px; color: white; }
-        .status.active { background: #4caf50; }
-        .status.pending { background: #ff9800; }
-        .status.rejected { background: #f44336; }
-
-        .logo-footer { text-align: center; margin-top: 40px; }
-        .logo-footer img { height: 70px; }
-
-        /* Modal CSS */
-        .modal-overlay {
-          position: fixed;
-          top: 0; left: 0;
-          width: 100%; height: 100%;
-          background: rgba(0,0,0,0.5);
-          display: flex; align-items: center; justify-content: center;
-          z-index: 999;
-        }
-        .modal {
-          background: #fff;
-          padding: 20px;
-          border-radius: 12px;
-          box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-          text-align: center;
-          width: 300px;
-        }
-        .modal-actions {
-          display: flex;
-          justify-content: space-around;
-          margin-top: 20px;
-        }
-        .modal-actions .yes {
-          background: #f12c3d;
-          color: white;
-          border: none;
-          padding: 8px 15px;
-          border-radius: 8px;
-          cursor: pointer;
-        }
-        .modal-actions .no {
-          background: #babac4;
-          color: white;
-          border: none;
-          padding: 8px 15px;
-          border-radius: 8px;
-          cursor: pointer;
-        }
-      `}</style>
     </div>
   );
 }

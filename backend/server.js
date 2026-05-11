@@ -9,6 +9,7 @@ const app = express();
 const server = http.createServer(app);
 const articleRoutes = require("./routes/articleRoutes");
 const categorieRoutes = require("./routes/categorieRoutes");
+const demandeRoutes = require("./routes/demandeRoutes");
 
 
 const io = new Server(server, {
@@ -49,6 +50,7 @@ app.use("/api", authRoutes);
 app.use("/api/articles", articleRoutes);
 app.use("/api/categories", categorieRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/demandes", demandeRoutes);
 app.put("/api/articles/:id", async (req, res) => {
 
   const { id } = req.params;

@@ -8,6 +8,7 @@ import Profile from "../pages/Profile";
 import Stock from "../pages/Admin/Stock";
 import UserStock from "../pages/Stock/Stock";
 import UserArticle from "../pages/User/UserArticle";
+import Demande from "../pages/User/Demande";
 import EditProfile from "../pages/EditProfile";
 
 
@@ -23,6 +24,7 @@ function AppRoutes() {
       <Route path="/profile" element={<Profile />} />
       <Route path="/stock" element={<Stock />} />
       <Route path="/userArticle" element={<UserArticle />} />
+       <Route path="/demande" element={<Demande />} />
       <Route path="/editProfile" element={<EditProfile />} />
       
     </Routes>

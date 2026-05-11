@@ -21,11 +21,12 @@ function Navbar() {
 
   return (
     <nav
-      className="fixed top-1 left-0 w-full z-[1000]
+       className="fixed top-0 left-0 w-full z-[1000] 
                  flex justify-between items-center px-4 py-2
-                 bg-gray-200 md:bg-white/70 md:backdrop-blur-md md:border md:border-black/10 md:rounded-xl md:shadow-md
+                 md:left-1/2 md:-translate-x-1/2 md:w-[90%] 
+                 md:bg-white/65 md:backdrop-blur-md md:border md:border-black/10 md:rounded-xl md:shadow-md
                  transition duration-300
-                 dark:bg-gray-900 dark:md:bg-gray-800 dark:md:border-white/20"
+                 dark:md:bg-[rgba(30,30,30,0.6)] dark:md:border dark:md:border-white/20"
     >
       {/* LOGO */}
       <Link to="/" className="flex flex-col items-center no-underline">
@@ -47,7 +48,7 @@ function Navbar() {
         </li>
         <li>
           <Link
-            to="/demandes"
+            to="/demande"
             className="text-blue-600 hover:text-blue-700 hover:underline"
           >
             Demandes

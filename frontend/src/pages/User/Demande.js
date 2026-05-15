@@ -3,6 +3,7 @@ import Navbar from "../../components/NavbarUser";
 
 import { getCategories } from "../../services/categorieService";
 import { getArticles } from "../../services/articleService";
+
 import {
   addDemande,
   getDemandesByUser,
@@ -14,6 +15,9 @@ export default function Demande() {
   const [articles, setArticles] = useState([]);
   const [filteredArticles, setFilteredArticles] = useState([]);
   const [demandes, setDemandes] = useState([]);
+
+  // LISTE PRODUITS TEMP
+  const [tempDemandes, setTempDemandes] = useState([]);
 
   const [formData, setFormData] = useState({
     categorie: "",
@@ -42,11 +46,9 @@ export default function Demande() {
   // ================= FETCH ARTICLES =================
   const fetchArticles = async () => {
     try {
+
       const data = await getArticles();
 
-      console.log("ARTICLES => ", data);
-
-      // articles dispo seulement
       const dispo = (data || []).filter(
         (a) => Number(a.quantite || 0) > 0
       );
@@ -60,6 +62,7 @@ export default function Demande() {
 
   // ================= FETCH DEMANDES =================
   const fetchDemandes = useCallback(async () => {
+
     try {
 
       if (!user_id) return;
@@ -71,10 +74,14 @@ export default function Demande() {
         : res?.data || [];
 
       setDemandes(data);
-
+      console.log(
+  "DEMANDES DETAIL =",
+  JSON.stringify(data, null, 2)
+);
     } catch (err) {
       console.log(err);
     }
+
   }, [user_id]);
 
   // ================= LOAD =================
@@ -98,29 +105,62 @@ export default function Demande() {
       produit: "",
     }));
 
-    // IMPORTANT FIX
-    // nom_cat na categorie
     const filtered = articles.filter(
       (a) =>
         a.nom_cat === value ||
         a.categorie === value
     );
 
-    console.log("FILTERED => ", filtered);
-
     setFilteredArticles(filtered);
   };
 
   // ================= INPUT =================
   const handleChange = (e) => {
+
     setFormData((prev) => ({
       ...prev,
       [e.target.name]: e.target.value,
     }));
   };
 
+  // ================= AJOUT =================
+  const handleAdd = () => {
+
+    if (
+      !formData.categorie ||
+      !formData.produit ||
+      !formData.quantiter
+    ) {
+      alert("Remplir les champs");
+      return;
+    }
+
+    const newItem = {
+      categorie: formData.categorie,
+      produit: formData.produit,
+      quantiter: formData.quantiter,
+      designation: formData.designation,
+    };
+
+    setTempDemandes((prev) => [
+      ...prev,
+      newItem,
+    ]);
+
+    // RESET FORM
+    setFormData({
+      categorie: "",
+      produit: "",
+      quantiter: "",
+      designation: "",
+    });
+
+    setFilteredArticles([]);
+  };
+
   // ================= SUBMIT =================
   const handleSubmit = async (e) => {
+
     e.preventDefault();
 
     try {
@@ -130,18 +170,61 @@ export default function Demande() {
         return;
       }
 
-      await addDemande({
-        id_user: user_id,
-        prenom,
-        role,
-        categorie: formData.categorie,
-        produit: formData.produit,
-        quantiter: Number(formData.quantiter),
-        designation: formData.designation,
-        status: "en attente",
-      });
+      
+      if (tempDemandes.length === 0) {
+        alert("Ajouter produit d'abord");
+        return;
+      }
+
+      // ID DEMANDE 1
+      const demande_group = "DEM-" + Date.now();
+
+      // PRODUIT MARO => DEMANDE 1
+      for (let item of tempDemandes) {
+
+        await addDemande({
+          id_user: user_id,
+          prenom,
+          role,
+
+          demande_group,
+
+          categorie: item.categorie,
+          produit: item.produit,
+          quantiter: Number(item.quantiter),
+          designation: item.designation,
+
+          status: "en attente",
+        });
+      }
+
+      // AFFICHAGE DIRECT HISTORIQUE
+      const newHistorique = tempDemandes.map(
+        (item, index) => ({
+          id: Date.now() + index,
+
+          demande_group,
+
+          categorie: item.categorie,
+          produit: item.produit,
+          quantiter: item.quantiter,
+          designation: item.designation,
+
+          status: "en attente",
+
+          created_at: new Date(),
+        })
+      );
+
+      setDemandes((prev) => [
+        ...newHistorique,
+        ...prev,
+      ]);
 
       alert("Demande envoyée");
+
+      // RESET
+      setTempDemandes([]);
 
       setFormData({
         categorie: "",
@@ -152,77 +235,127 @@ export default function Demande() {
 
       setFilteredArticles([]);
 
-      fetchDemandes();
-
     } catch (err) {
       console.log(err);
       alert("Erreur serveur");
     }
   };
 
+  const groupedDemandes = demandes.reduce((acc, item) => {
+
+  const key = item.demande_group;
+
+  // si pas de group → fallback propre
+  if (!key) {
+    const fallback = `single-${item.id}`;
+
+    if (!acc[fallback]) acc[fallback] = [];
+    acc[fallback].push(item);
+
+    return acc;
+  }
+
+  if (!acc[key]) {
+    acc[key] = [];
+  }
+
+  acc[key].push(item);
+
+  return acc;
+
+}, {});
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
       <Navbar />
 
       {/* ================= LAYOUT ================= */}
-      <div className="flex flex-col md:flex-row gap-4 px-3 pt-24">
+      <div className="flex flex-col md:flex-row gap-4 mt-5 px-3 pt-24">
 
-        {/* ================= HISTORIQUE ================= */}
-        <div className="w-full md:w-[40%] bg-white dark:bg-gray-800 rounded-xl shadow p-3 max-h-[80vh] overflow-y-auto">
+       {/* ================= HISTORIQUE ================= */}
+<div className="w-full md:w-[65%] bg-white dark:bg-gray-800 rounded-xl shadow p-3 max-h-[80vh] overflow-y-auto">
 
-          <h2 className="text-sm font-bold text-blue-600 mb-3">
-            📜 Historique des demandes
-          </h2>
+  <h2 className="text-sm font-bold text-blue-600 mb-3">
+    📜 Historique des demandes
+  </h2>
 
-          {demandes.length === 0 && (
-            <p className="text-xs text-gray-500">
-              Aucune demande
+  {demandes.length === 0 && (
+    <p className="text-xs text-gray-500">
+      Aucune demande
+    </p>
+  )}
+
+  <div className="space-y-3">
+
+    {Object.entries(groupedDemandes).map(([groupId, items], index) => {
+
+      const date = items[0]?.timestamp || items[0]?.created_at;
+
+      return (
+        <div
+          key={groupId}
+          className="p-3 rounded-lg border bg-white dark:bg-gray-700 text-xs"
+        >
+
+          {/* HEADER DEMANDE */}
+          <div className="flex justify-between items-center mb-2">
+            <p className="font-bold text-blue-600">
+              Demande {index + 1}
+            </p>
+
+            <span
+              className={`px-2 py-1 rounded text-xs font-bold ${
+                items[items.length - 1]?.status === "validé"
+                  ? "bg-green-100 text-green-700"
+                  : items[items.length - 1]?.status === "refusé"
+                  ? "bg-red-200 text-red-700"
+                  : "bg-yellow-200 text-yellow-700"
+              }`}
+            >
+              {items[items.length - 1]?.status || "en attente"}
+            </span>
+          </div>
+
+          
+          {date && (
+            <p className="text-[10px] text-gray-400 mb-2">
+              {new Date(date).toLocaleString()}
             </p>
           )}
 
+          {/* ITEMS */}
           <div className="space-y-2">
+            {items.map((d) => (
+              <div key={d.id} className="border-b pb-2 flex justify-between">
 
-            {demandes.map((d) => (
-              <div
-                key={d.id}
-                className="p-2 rounded-lg border text-xs bg-white dark:bg-gray-700"
-              >
+                <div>
+                  <p className="font-semibold text-blue-600">
+                    {d.categorie}
+                  </p>
 
-                <p className="font-semibold">
-                  {d.produit}
-                </p>
+                  <p className="font-semibold">
+                    {d.produit}
+                  </p>
 
-                <p>
-                  Quantité : {d.quantiter}
-                </p>
+                  <p className="text-gray-600">
+                    Quantité : {d.quantiter}
+                  </p>
+                </div>
 
-                <p className="text-[10px] text-gray-400">
-                  {new Date(
-                    d.timestamp || d.created_at
-                  ).toLocaleString()}
-
-                <span
-                  className={`px-2 py-1 rounded text-xs font-bold ${
-                    d.status === "validé"
-                      ? "bg-green-100 text-green-700"
-                      : d.status === "refusé"
-                      ? "bg-red-200 text-red-700"
-                      : "bg-yellow-200 text-yellow-700"
-                  }`}
-                >
-                  {d.status || "en attente"}
-                </span>
-                </p>
-
+             
 
               </div>
             ))}
-
           </div>
+
         </div>
+      );
+    })}
+
+  </div>
+</div>
 
         {/* ================= FORM ================= */}
-        <div className="w-full md:w-[60%]">
+        <div className="w-full md:w-[30%]">
 
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow p-4">
 
@@ -240,7 +373,6 @@ export default function Demande() {
                 value={formData.categorie}
                 onChange={handleCategoryChange}
                 className="w-full p-2 rounded border dark:bg-gray-700 dark:text-white"
-                required
               >
                 <option value="">
                   Sélectionner catégorie
@@ -257,16 +389,21 @@ export default function Demande() {
               </select>
 
               {/* ================= PRODUIT ================= */}
-             
               <select
                 name="produit"
                 value={formData.produit}
                 onChange={handleChange}
                 className="w-full p-2 rounded border dark:bg-gray-700 dark:text-white"
               >
-                <option value="">Produit</option>
+                <option value="">
+                  Produit
+                </option>
+
                 {filteredArticles.map((a) => (
-                  <option key={a.ref_art} value={a.produit}>
+                  <option
+                    key={a.ref_art}
+                    value={a.produit}
+                  >
                     {a.produit}
                   </option>
                 ))}
@@ -281,7 +418,6 @@ export default function Demande() {
                 onChange={handleChange}
                 className="w-full p-2 rounded border dark:bg-gray-700 dark:text-white"
                 placeholder="Entrer la quantité"
-                required
               />
 
               {/* ================= DESIGNATION ================= */}
@@ -295,14 +431,66 @@ export default function Demande() {
               />
 
               {/* ================= BUTTON ================= */}
-              <button
-                type="submit"
-                className="w-full bg-blue-600 hover:bg-blue-700 text-white p-2 rounded"
-              >
-                Envoyer
-              </button>
+              <div className="flex gap-2">
+
+                <button
+                  type="button"
+                  onClick={handleAdd}
+                  className="w-1/2 bg-green-600 hover:bg-green-700 text-white p-2 rounded"
+                >
+                  + Ajout
+                </button>
+
+                <button
+                  type="submit"
+                  className="w-1/2 bg-blue-600 hover:bg-blue-700 text-white p-2 rounded"
+                >
+                  Envoyer
+                </button>
+
+              </div>
 
             </form>
+
+            {/* ================= LISTE DEMANDE ================= */}
+            {tempDemandes.length > 0 && (
+
+              <div className="mt-4">
+
+                <p className="text-sm font-bold text-blue-600 mb-2">
+                  Liste demande
+                </p>
+
+                <div className="space-y-2">
+
+                  {tempDemandes.map(
+                    (item, index) => (
+
+                      <div
+                        key={index}
+                        className="p-2 rounded border text-xs bg-white dark:bg-gray-700"
+                      >
+
+                        <p className="font-semibold text-blue-600">
+                          Catégorie : {item.categorie}
+                        </p>
+
+                        <p className="font-semibold">
+                          {item.produit}
+                        </p>
+
+                        <p>
+                          Quantité : {item.quantiter}
+                        </p>
+
+                      </div>
+                    )
+                  )}
+
+                </div>
+
+              </div>
+            )}
 
           </div>
         </div>

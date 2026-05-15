@@ -51,6 +51,7 @@ app.use("/api/articles", articleRoutes);
 app.use("/api/categories", categorieRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/demandes", demandeRoutes);
+
 app.put("/api/articles/:id", async (req, res) => {
 
   const { id } = req.params;

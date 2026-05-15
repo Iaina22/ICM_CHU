@@ -56,7 +56,7 @@ function Navbar() {
           </Link>
         </li>
         <li className="hidden md:block">
-          <Link to="/demandes" className="text-blue-600 hover:text-blue-700 hover:underline">
+          <Link to="/demandeAdmin" className="text-blue-600 hover:text-blue-700 hover:underline">
             Demandes
           </Link>
         </li>
@@ -82,7 +82,7 @@ function Navbar() {
               <Link to="/adminhome" onClick={() => setMenuOpen(false)} className="text-blue-600 dark:text-white hover:underline">
                 Utilisateurs
               </Link>
-              <Link to="/demandes" onClick={() => setMenuOpen(false)} className="text-blue-600 dark:text-white hover:underline">
+              <Link to="/demandeAdmin" onClick={() => setMenuOpen(false)} className="text-blue-600 dark:text-white hover:underline">
                 Demandes
               </Link>
             </div>

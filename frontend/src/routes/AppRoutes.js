@@ -3,6 +3,8 @@ import Home from "../pages/Home";
 import Register from "../pages/Register";
 import Login from "../pages/Login";
 import Adminhome from "../pages/Admin/Adminhome";
+import DemandeAdmin from "../pages/Admin/DemandeAdmin";
+import DemandeDetail from "../pages/Admin/DemandeDetail";
 import Article from "../pages/Admin/Article";
 import Profile from "../pages/Profile";
 import Stock from "../pages/Admin/Stock";
@@ -19,6 +21,8 @@ function AppRoutes() {
       <Route path="/register" element={<Register />} />
       <Route path="/login" element={<Login />} />
       <Route path="/adminhome" element={<Adminhome />} />
+      <Route path="/demandeAdmin" element={<DemandeAdmin />} />
+       <Route path="/demandeDetail" element={<DemandeDetail />} />
       <Route path="/article" element={<Article />} />
       <Route path="/UserStock" element={<UserStock />} />
       <Route path="/profile" element={<Profile />} />

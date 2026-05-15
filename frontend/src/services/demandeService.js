@@ -1,13 +1,22 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/demandes";
+const API = "http://localhost:5000/api/demandes";
 
-export const addDemande = async (demande) => {
-  const res = await axios.post(API_URL, demande);
+export const getAllDemandes = async () => {
+  const res = await axios.get(`${API}/all`);
   return res.data;
 };
 
-export const getDemandesByUser = async (userId) => {
-  const res = await axios.get(`${API_URL}/user/${userId}`);
+export const getDemandesByUser = async (id) => {
+  const res = await axios.get(`${API}/user/${id}`);
+  return res.data;
+};
+
+export const addDemande = async (data) => {
+  const res = await axios.post(`${API}`, data);
+  return res.data;
+};
+export const updateDemandeStatus = async (data) => {
+  const res = await axios.put("http://localhost:5000/api/demandes/status", data);
   return res.data;
 };
